@@ -8,8 +8,9 @@ import {
 } from 'react-native';
 import { Font } from 'exponent';
 import ModalView from './tagsModal';
-import { Container, Header, Title, Content, Footer, Button, Spinner } from 'native-base';
+import { Container, Header, Title, Content, Footer, Button, Spinner, Input, InputGroup} from 'native-base';
 import { Ionicons } from '@exponent/vector-icons';
+import config from './config';
 
 var STORAGE_KEY = 'id_token';
 
@@ -49,6 +50,32 @@ export default class Memory extends React.Component {
     }
   }
 
+  async editCaption() {
+    
+  }
+
+  async saveCaption() {
+    try {
+      var token =  await AsyncStorage.getItem(STORAGE_KEY);
+    } catch (error) {
+      console.log('AsyncStorage error: ' + error.message);
+    }
+
+    fetch(config.domain + '/api/memories/id/' + this.state.databaseId, {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + token,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.Stringify({
+        tags: null,
+        caption: "Test"
+      })
+    }).catch(function(err) {
+      
+    })
+  }
+
   async uploadPhoto() {
     var context = this;
     var photo = {
@@ -65,7 +92,7 @@ export default class Memory extends React.Component {
 
     var form = new FormData();
     form.append('memoryImage', photo);
-    fetch('https://invalid-memories-greenfield.herokuapp.com/api/memories/upload', 
+    fetch(config.domain + '/api/memories/upload', 
       {
         body: form,
         method: 'POST',
@@ -87,7 +114,7 @@ export default class Memory extends React.Component {
       console.log('AsyncStorage error: ' + error.message);
     }
 
-    fetch('https://invalid-memories-greenfield.herokuapp.com/api/memories/id/' + id, {
+    fetch(config.domain + '/api/memories/id/' + id, {
       method: 'GET',
       headers: {
         'Authorization': 'Bearer ' + token
@@ -153,14 +180,15 @@ export default class Memory extends React.Component {
       console.log('AsyncStorage error: ' + error.message);
     }
 
-    fetch('https://invalid-memories-greenfield.herokuapp.com/api/memories/id/' + this.state.databaseId, {
+    fetch(config.domain + '/api/memories/id/' + this.state.databaseId, {
       method: 'POST',
       headers: {
         'Authorization': 'Bearer ' + token,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        tags: this.state.filteredTags
+        tags: this.state.filteredTags,
+        caption: null
       })
     }).catch(function(err) {
       
@@ -196,7 +224,8 @@ export default class Memory extends React.Component {
             }
           }>
           <Image style={styles.image} resizeMode={Image.resizeMode.contain} source={{uri: this.state.image.uri}}/>
-          <Text style={styles.caption}>{this.state.caption}</Text>
+            <Text onPress={this.editCaption.bind(this)} style={styles.caption}>{this.state.caption}</Text>
+            <CaptionEditor saveCaption={this.saveCaption} captions={this.state.caption} />
           <MemoryDetails 
             status={this.state.status} 
             tags={this.state.filteredTags}
@@ -237,6 +266,27 @@ class MemoryDetails extends React.Component {
   }
 }
 
+class CaptionEditor extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      caption: ''
+    };
+  }
+
+  render() {
+    return (
+      <InputGroup>
+          <Input
+            placeholderTextColor='#444'
+            onChangeText={(text) => this.setState({caption: text})}
+            style={styles.captionInput}
+          />
+      </InputGroup>
+    )
+  }
+}
+
 const styles = StyleSheet.create({
   headerText: {
     ...Font.style('pacifico'),
@@ -259,6 +309,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     margin: 10
+  },
+
+  captionInput: {
+    ...Font.style('montserrat'),
+    fontSize: 16,
+    textAlign: 'center',
   },
 
   tag: {

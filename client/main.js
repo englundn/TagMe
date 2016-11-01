@@ -4,6 +4,7 @@ import Login from './login';
 import Homescreen from './homescreen';
 import Memory from './memory';
 import Memories from './memories';
+import config from './config';
 import {
   Navigator
 } from 'react-native';
