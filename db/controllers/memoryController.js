@@ -134,7 +134,7 @@ exports.storeTags = function(req, res) {
   Memory.findOne({ _id: req.params.id }).then(function(memory) {
     if (req.body.tags === null) {
       console.log(req.body);
-      memory.analyses[2].original = req.body.caption;
+      memory.analyses[2].tags[0] = req.body.caption;
     } else {
       memory.tags = req.body.tags;
     }
