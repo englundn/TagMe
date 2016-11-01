@@ -10,6 +10,7 @@ import {
 import { Font } from 'exponent';
 import { Container, Header, Title, Content, Footer, Button, List, ListItem, Input, InputGroup } from 'native-base';
 import { Ionicons } from '@exponent/vector-icons';
+import config from './config';
 
 var STORAGE_KEY = 'id_token';
 
@@ -53,7 +54,7 @@ export default class Login extends React.Component {
     var context = this;
 
     if (this.state.username && this.state.password) {
-      fetch('https://invalid-memories-greenfield.herokuapp.com/api/users/login', {
+      fetch(config.domain + '/api/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -85,7 +86,7 @@ export default class Login extends React.Component {
     var context = this;
 
     if (this.state.username && this.state.password) {
-      fetch('https://invalid-memories-greenfield.herokuapp.com/api/users/signup', {
+      fetch(config.domain + '/api/users/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

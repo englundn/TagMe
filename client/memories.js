@@ -10,6 +10,7 @@ import {
 import { Font } from 'exponent';
 import { Container, Header, Title, Content, Footer, InputGroup, Input, Button } from 'native-base';
 import { Ionicons } from '@exponent/vector-icons';
+import config from './config';
 
 var STORAGE_KEY = 'id_token';
 
@@ -64,7 +65,7 @@ export default class Memories extends React.Component {
       console.log('AsyncStorage error: ' + error.message);
     }
 
-    fetch('https://invalid-memories-greenfield.herokuapp.com/api/memories/all', {
+    fetch(config.domain + '/api/memories/all', {
       method: 'GET',
       headers: {
         'Authorization': 'Bearer ' + token
@@ -89,7 +90,7 @@ export default class Memories extends React.Component {
     } catch (error) {
       console.log('AsyncStorage error: ' + error.message);
     }
-    fetch('https://invalid-memories-greenfield.herokuapp.com/api/memories/search/' + this.state.searchQuery.toLowerCase(), {
+    fetch(config.domain + '/api/memories/search/' + this.state.searchQuery.toLowerCase(), {
       method: 'GET',
       headers: {
         'Authorization': 'Bearer ' + token

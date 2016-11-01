@@ -11,6 +11,7 @@ import {
 import { Font } from 'exponent';
 import { Container, Header, Title, Content, Footer, Button } from 'native-base';
 import { Ionicons } from '@exponent/vector-icons';
+import config from './config';
 
 var STORAGE_KEY = 'id_token';
 
