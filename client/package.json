@@ -1,0 +1,34 @@
+{
+  "name": "memories",
+  "version": "0.0.0",
+  "description": "auto-journal memories",
+  "author": null,
+  "private": true,
+  "main": "main.js",
+  "dependencies": {
+    "@exponent/vector-icons": "^1.0.4",
+    "exponent": "^10.0.4",
+    "native-base": "^0.5.11",
+    "react": "~15.3.2",
+    "react-native": "github:exponentjs/react-native#sdk-10.1.2",
+    "react-native-button": "^1.7.1",
+    "react-native-fetch-blob": "^0.9.6"
+  },
+  "devDependencies": {
+    "jest-exponent": "^0.1.0",
+    "whatwg-fetch": "^1.0.0"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "jest-exponent",
+    "moduleNameMapper": {
+      "\\./datepicker$": "<rootDir>/node_modules/tcomb-form-native/lib/templates/bootstrap/datepicker.ios.js",
+      "\\./select$": "<rootDir>/node_modules/tcomb-form-native/lib/templates/bootstrap/select.ios.js"
+    },
+    "preprocessorIgnorePatterns": [
+      "node_modules/(?!react-native|tcomb-form-native|apsl-react-native-button)"
+    ]
+  }
+}

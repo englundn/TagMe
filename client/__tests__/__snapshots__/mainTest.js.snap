@@ -1,0 +1,351 @@
+exports[`test Homescreen renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#fff",
+      "flex": 1,
+      "justifyContent": "center",
+    }
+  }>
+  <View
+    accessibilityComponentType={undefined}
+    accessibilityLabel={undefined}
+    accessibilityTraits={undefined}
+    accessible={true}
+    hitSlop={undefined}
+    onLayout={undefined}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Array [
+        Object {
+          "backgroundColor": "transparent",
+        },
+        undefined,
+      ]
+    }
+    testID={undefined}>
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Object {
+          "borderColor": "gray",
+          "borderWidth": 1,
+          "height": 40,
+        }
+      }>
+      View All
+    </Text>
+  </View>
+  <View
+    accessibilityComponentType={undefined}
+    accessibilityLabel={undefined}
+    accessibilityTraits={undefined}
+    accessible={true}
+    hitSlop={undefined}
+    onLayout={undefined}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Array [
+        Object {
+          "backgroundColor": "transparent",
+        },
+        undefined,
+      ]
+    }
+    testID={undefined}>
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Object {
+          "borderColor": "gray",
+          "borderWidth": 1,
+          "height": 40,
+        }
+      }>
+      Upload Photo
+    </Text>
+  </View>
+  <View
+    accessibilityComponentType={undefined}
+    accessibilityLabel={undefined}
+    accessibilityTraits={undefined}
+    accessible={true}
+    hitSlop={undefined}
+    onLayout={undefined}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Array [
+        Object {
+          "backgroundColor": "transparent",
+        },
+        undefined,
+      ]
+    }
+    testID={undefined}>
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      onPress={[Function]}
+      style={
+        Object {
+          "borderColor": "gray",
+          "borderWidth": 1,
+          "height": 40,
+        }
+      }>
+      Logout
+    </Text>
+  </View>
+</View>
+`;
+
+exports[`test Login renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#fff",
+      "flex": 1,
+      "justifyContent": "center",
+    }
+  }>
+  <Text
+    accessible={true}
+    allowFontScaling={true}
+    ellipsizeMode="tail" />
+  <Text
+    accessible={true}
+    allowFontScaling={true}
+    ellipsizeMode="tail">
+    Selfsnap!
+  </Text>
+  <View
+    style={Object {}}>
+    <View
+      style={
+        Object {
+          "marginBottom": 10,
+        }
+      }>
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "color": "#000000",
+            "fontSize": 17,
+            "fontWeight": "500",
+            "marginBottom": 7,
+          }
+        }>
+        Username
+      </Text>
+      <TextInput
+        accessibilityLabel="Username"
+        autoCapitalize={undefined}
+        autoCorrect={undefined}
+        autoFocus={undefined}
+        blurOnSubmit={undefined}
+        clearButtonMode={undefined}
+        clearTextOnFocus={undefined}
+        editable={undefined}
+        enablesReturnKeyAutomatically={undefined}
+        keyboardAppearance={undefined}
+        keyboardType={undefined}
+        maxLength={undefined}
+        multiline={undefined}
+        numberOfLines={undefined}
+        onBlur={undefined}
+        onChange={undefined}
+        onChangeText={[Function]}
+        onEndEditing={undefined}
+        onFocus={undefined}
+        onKeyPress={undefined}
+        onLayout={undefined}
+        onSelectionChange={undefined}
+        onSubmitEditing={undefined}
+        placeholder={undefined}
+        placeholderTextColor={undefined}
+        returnKeyType={undefined}
+        secureTextEntry={undefined}
+        selectTextOnFocus={undefined}
+        selectionColor={undefined}
+        selectionState={undefined}
+        style={
+          Object {
+            "borderColor": "#cccccc",
+            "borderRadius": 4,
+            "borderWidth": 1,
+            "color": "#000000",
+            "fontSize": 17,
+            "height": 36,
+            "marginBottom": 5,
+            "padding": 7,
+          }
+        }
+        underlineColorAndroid={undefined}
+        value="" />
+    </View>
+    <View
+      style={
+        Object {
+          "marginBottom": 10,
+        }
+      }>
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "color": "#000000",
+            "fontSize": 17,
+            "fontWeight": "500",
+            "marginBottom": 7,
+          }
+        }>
+        Password
+      </Text>
+      <TextInput
+        accessibilityLabel="Password"
+        autoCapitalize={undefined}
+        autoCorrect={undefined}
+        autoFocus={undefined}
+        blurOnSubmit={undefined}
+        clearButtonMode={undefined}
+        clearTextOnFocus={undefined}
+        editable={undefined}
+        enablesReturnKeyAutomatically={undefined}
+        keyboardAppearance={undefined}
+        keyboardType={undefined}
+        maxLength={undefined}
+        multiline={undefined}
+        numberOfLines={undefined}
+        onBlur={undefined}
+        onChange={undefined}
+        onChangeText={[Function]}
+        onEndEditing={undefined}
+        onFocus={undefined}
+        onKeyPress={undefined}
+        onLayout={undefined}
+        onSelectionChange={undefined}
+        onSubmitEditing={undefined}
+        placeholder={undefined}
+        placeholderTextColor={undefined}
+        returnKeyType={undefined}
+        secureTextEntry={undefined}
+        selectTextOnFocus={undefined}
+        selectionColor={undefined}
+        selectionState={undefined}
+        style={
+          Object {
+            "borderColor": "#cccccc",
+            "borderRadius": 4,
+            "borderWidth": 1,
+            "color": "#000000",
+            "fontSize": 17,
+            "height": 36,
+            "marginBottom": 5,
+            "padding": 7,
+          }
+        }
+        underlineColorAndroid={undefined}
+        value="" />
+    </View>
+  </View>
+  <View
+    accessibilityComponentType={undefined}
+    accessibilityLabel={undefined}
+    accessibilityTraits={undefined}
+    accessible={true}
+    hitSlop={undefined}
+    onLayout={undefined}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Array [
+        Object {
+          "backgroundColor": "transparent",
+        },
+        undefined,
+      ]
+    }
+    testID={undefined}>
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Object {
+          "borderColor": "gray",
+          "borderWidth": 1,
+          "height": 40,
+        }
+      }>
+      Login
+    </Text>
+  </View>
+  <View
+    accessibilityComponentType={undefined}
+    accessibilityLabel={undefined}
+    accessibilityTraits={undefined}
+    accessible={true}
+    hitSlop={undefined}
+    onLayout={undefined}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Array [
+        Object {
+          "backgroundColor": "transparent",
+        },
+        undefined,
+      ]
+    }
+    testID={undefined}>
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Object {
+          "borderColor": "gray",
+          "borderWidth": 1,
+          "height": 40,
+        }
+      }>
+      Signup
+    </Text>
+  </View>
+</View>
+`;
