@@ -82,13 +82,16 @@ export default class ModalView extends React.Component {
             <View>
               <View style={styles.tagsContainer}>
               {
-                this.props.tags.map(tag =>
-                  <Tag 
-                    name={tag}
-                    addTag={this.addTag.bind(this)}
-                    removeTag={this.removeTag.bind(this)}
-                  />
-                )
+                this.props.tags.map((tag, index) => {
+                  return (
+                     <Tag 
+                      name={tag}
+                      addTag={this.addTag.bind(this)}
+                      removeTag={this.removeTag.bind(this)}
+                      selected={this.props.previousTags.includes(tag)}
+                    />
+                  )
+                })
               }
               </View>
             </View>
@@ -109,10 +112,17 @@ class Tag extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: false,
+      selected: this.props.selected,
       allTags: []
     };
   }
+
+  async componentWillMount() {
+    if (this.props.selected) {
+      this.props.addTag(this.props.name);
+    }
+  }
+
 
   selectTag() {
     this.setState({
