@@ -225,7 +225,7 @@ export default class Memory extends React.Component {
           }>
           <Image style={styles.image} resizeMode={Image.resizeMode.contain} source={{uri: this.state.image.uri}}/>
             <Text onPress={this.saveCaption.bind(this)} style={styles.caption}>{this.state.caption}</Text>
-            <CaptionEditor saveCaption={this.saveCaption} captions={this.state.caption} />
+            <CaptionEditor saveCaption={this.saveCaption.bind(this)} captions={this.state.caption} />
           <MemoryDetails 
             status={this.state.status} 
             tags={this.state.filteredTags}
