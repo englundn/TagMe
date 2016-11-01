@@ -139,6 +139,10 @@ export default class Memory extends React.Component {
   }
 
   async updateTags(filteredTags) {
+    if (filteredTags.length === 0) {
+      return;
+    }
+
     this.setState({
       filteredTags: filteredTags
     });
@@ -168,6 +172,7 @@ export default class Memory extends React.Component {
       <ModalView 
         prevScene={this.props.prevScene} 
         tags={this.state.tags} 
+        previousTags={this.state.filteredTags}
         updateTags={this.updateTags.bind(this)}
         status={this.state.status}
       />
