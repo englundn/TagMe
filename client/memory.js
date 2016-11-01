@@ -54,7 +54,7 @@ export default class Memory extends React.Component {
     
   }
 
-  async saveCaption() {
+  async saveCaption(newCaption) {
     try {
       var token =  await AsyncStorage.getItem(STORAGE_KEY);
     } catch (error) {
@@ -67,9 +67,9 @@ export default class Memory extends React.Component {
         'Authorization': 'Bearer ' + token,
         'Content-Type': 'application/json'
       },
-      body: JSON.Stringify({
+      body: JSON.stringify({
         tags: null,
-        caption: "Test"
+        caption: newCaption
       })
     }).catch(function(err) {
       
@@ -224,7 +224,7 @@ export default class Memory extends React.Component {
             }
           }>
           <Image style={styles.image} resizeMode={Image.resizeMode.contain} source={{uri: this.state.image.uri}}/>
-            <Text onPress={this.editCaption.bind(this)} style={styles.caption}>{this.state.caption}</Text>
+            <Text onPress={this.saveCaption.bind(this)} style={styles.caption}>{this.state.caption}</Text>
             <CaptionEditor saveCaption={this.saveCaption} captions={this.state.caption} />
           <MemoryDetails 
             status={this.state.status} 
@@ -274,15 +274,30 @@ class CaptionEditor extends React.Component {
     };
   }
 
+  saveCaption() {
+    this.props.saveCaption(this.state.caption);
+  }
+
   render() {
     return (
-      <InputGroup>
-          <Input
-            placeholderTextColor='#444'
-            onChangeText={(text) => this.setState({caption: text})}
-            style={styles.captionInput}
-          />
-      </InputGroup>
+      <View>
+        <View>
+          <InputGroup>
+                <Input
+                  placeholderTextColor='#444'
+                  onChangeText={(text) => this.setState({caption: text})}
+                  style={styles.captionInput}
+                />
+          </InputGroup>
+        </View>
+        <View style={styles.buttonsContainer}>
+          <Button primary style={styles.button} onPress={this.saveCaption.bind(this)}>
+            <Text style={styles.buttonText}>
+              Save
+            </Text>
+          </Button>
+        </View>
+      </View>
     )
   }
 }
@@ -315,6 +330,23 @@ const styles = StyleSheet.create({
     ...Font.style('montserrat'),
     fontSize: 16,
     textAlign: 'center',
+  },
+
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  button: {
+    margin: 10,
+    backgroundColor: '#f6755e'
+  },
+
+  buttonText: {
+    ...Font.style('montserrat'),
+    color: '#fff',
+    fontSize: 18
   },
 
   tag: {
