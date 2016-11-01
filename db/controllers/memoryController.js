@@ -127,13 +127,20 @@ exports.fetchOne = function(req, res) {
 exports.storeTags = function(req, res) {
   // If there is no JSON body, return 400
   console.log('POST /api/memories/id/*. username:', req.user.username);
-  if (!req.body || !req.body.tags) {
+  if (!req.body) {
     return res.sendStatus(400);
   }
 
   Memory.findOne({ _id: req.params.id }).then(function(memory) {
-    memory.tags = req.body.tags;
+    if (req.body.tags === null) {
+      console.log(req.body);
+      memory.analyses[2].original = req.body.caption;
+    } else {
+      memory.tags = req.body.tags;
+    }
+    //
     memory.save(function(err) {
+      console.log(memory);
       if (err) {
         console.log('Error saving tags:', err);
         res.sendStatus(404);
