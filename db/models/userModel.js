@@ -8,6 +8,7 @@ var userSchema = new Schema({
     unique: true
   },
   password: String,
+  deviceId: String,
   memories: [{
     type: Schema.Types.ObjectId,
     ref: 'Memory'
