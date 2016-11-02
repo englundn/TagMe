@@ -119,6 +119,10 @@ export default class Memory extends React.Component {
       });
   }
 
+  async deleteMemory() {
+    console.log('delete in memory.js');
+  }
+
   async getMemoryData(id, pings) {
     var context = this;
     try {
