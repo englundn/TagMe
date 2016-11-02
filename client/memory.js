@@ -12,6 +12,7 @@ import {
 import { Font } from 'exponent';
 import ModalView from './tagsModal';
 import { Container, Header, Title, Content, Footer, Button, Spinner, Input, InputGroup} from 'native-base';
+import { AudioRecorder, AudioUtils } from 'react-native-audio';
 import { Ionicons } from '@exponent/vector-icons';
 import config from './config';
 
