@@ -2,8 +2,31 @@ var expect = require('chai').expect;
 var request = require('request');
 var fs = require('fs');
 var FormData = require('form-data');
+var bcrypt = require('bcrypt');
 
 var User = require('../db/models/userModel');
+
+var hashPassword = function(pw, callback) {
+  bcrypt.genSalt(4, function(err, salt) {
+    bcrypt.hash(pw, salt, function(err, hash) {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      callback(hash);
+    });
+  });
+};
+
+var comparePassword = function(pw, hash, callback) {
+  bcrypt.compare(pw, hash, function(err, match) {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    callback(match);
+  });
+};
 
 describe('Unprotected routes: ', function() {
 
@@ -20,7 +43,7 @@ describe('Unprotected routes: ', function() {
 
     var signUpOptions = {
       method: 'POST',
-      url: 'http://localhost:3000/api/users/signup',
+      url: 'http://tagmelegacy.herokuapp.com/api/users/signup',
       json: {
         username: 'Phillip',
         password: 'Phillip'
@@ -59,7 +82,23 @@ describe('Unprotected routes: ', function() {
         User.findOne({username: 'Phillip'})
           .exec(function(err, user) {
             expect(user.username).to.equal('Phillip');
-            expect(user.password).to.equal('Phillip'); // TODO change when encrypted
+
+            var hashPassword = function(pw, callback) {
+              bcrypt.genSalt(4, function(err, salt) {
+                bcrypt.hash(pw, salt, function(err, hash) {
+                  if (err) {
+                    console.error(err);
+                    return;
+                  }
+                  callback(hash);
+                });
+              });
+            };
+
+            comparePassword('Phillip', user.password, function(isMatch) {
+              expect(isMatch).to.be.true;
+            });
+
           });
         done();
       });
@@ -70,7 +109,7 @@ describe('Unprotected routes: ', function() {
 
     var signUpOptions = {
       method: 'POST',
-      url: 'http://localhost:3000/api/users/signup',
+      url: 'http://tagmelegacy.herokuapp.com/api/users/signup',
       json: {
         username: 'Phillip',
         password: 'Phillip'
@@ -78,7 +117,7 @@ describe('Unprotected routes: ', function() {
     };
     var loginOptions = {
       method: 'POST',
-      url: 'http://localhost:3000/api/users/login',
+      url: 'http://tagmelegacy.herokuapp.com/api/users/login',
       json: {
         username: 'Phillip',
         password: 'Phillip'
@@ -111,11 +150,11 @@ describe('Unprotected routes: ', function() {
 
   });
 
-  describe('Memory creation', function() {
+  xdescribe('Memory creation', function() {
    
     var signUpOptions = {
       method: 'POST',
-      url: 'http://localhost:3000/api/users/signup',
+      url: 'http://tagmelegacy.herokuapp.com/api/users/signup',
       json: {
         username: 'new',
         password: 'new'
@@ -157,11 +196,11 @@ describe('Unprotected routes: ', function() {
     });
   });
 
-  describe('Memory access', function() {
+  xdescribe('Memory access', function() {
     it ('should return the details of a memory given an id', function(done) {
       var accessOneOptions = {
         method: 'GET',
-        url: 'http://localhost:3000/api/memories/id/5816923fc196a000184ae43a',
+        url: 'http://tagmelegacy.herokuapp.com/api/memories/id/581a146e53f50e00181d7cfe',
         headers: {
           'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ODBmYzdiMTZhYWE2ODM2OTk2NDc5MTQiLCJ1c2VybmFtZSI6Im5ldyIsInBhc3N3b3JkIjoidXNlciIsIl9fdiI6MCwibWVtb3JpZXMiOltdfQ.VfV0DtedVfOUZNAM6fOrMQCakF6Zrcbk-ujie0YGvd4'
         },
@@ -180,7 +219,7 @@ describe('Unprotected routes: ', function() {
       // give it 5 sec to return all images
       var accessAllOptions = {
         method: 'GET',
-        url: 'http://localhost:3000/api/memories/all',
+        url: 'http://tagmelegacy.herokuapp.com/api/memories/all',
         headers: {
           Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ODBmYzdiMTZhYWE2ODM2OTk2NDc5MTQiLCJ1c2VybmFtZSI6Im5ldyIsInBhc3N3b3JkIjoidXNlciIsIl9fdiI6MCwibWVtb3JpZXMiOltdfQ.VfV0DtedVfOUZNAM6fOrMQCakF6Zrcbk-ujie0YGvd4'
         }
@@ -198,7 +237,7 @@ describe('Unprotected routes: ', function() {
     it ('should find a memory with the water tag', function(done) {
       var searchOptions = {
         method: 'GET',
-        url: 'http://localhost:3000/api/memories/search/water',
+        url: 'http://tagmelegacy.herokuapp.com/api/memories/search/water',
         headers: {
           Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ODBmYzdiMTZhYWE2ODM2OTk2NDc5MTQiLCJ1c2VybmFtZSI6Im5ldyIsInBhc3N3b3JkIjoidXNlciIsIl9fdiI6MCwibWVtb3JpZXMiOltdfQ.VfV0DtedVfOUZNAM6fOrMQCakF6Zrcbk-ujie0YGvd4'
         }
