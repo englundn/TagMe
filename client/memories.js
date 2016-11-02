@@ -4,6 +4,7 @@ import {
   AsyncStorage,
   View,
   ScrollView,
+  AlertIOS,
   Text,
   TouchableHighlight,
   Image
@@ -25,14 +26,17 @@ export default class Memories extends React.Component {
       imageList: [],
       queryList: [],
       fontLoaded: false,
-      searchQuery: '',
+      searchTerm: '',
+      searchQuery: [],
       searching: false
     };
   }
 
   async componentDidMount() {
     await Font.loadAsync({
+      'helvetica': require('./assets/fonts/HelveticaNeueMed.ttf'),
       'pacifico': require('./assets/fonts/Pacifico.ttf'),
+
     });
     this.setState({ fontLoaded: true });
     this.fetchMemories();
@@ -50,6 +54,7 @@ export default class Memories extends React.Component {
     });
   }
 
+
   _navigateHome() {
     this.props.navigator.push({
       name: 'Homescreen',
@@ -60,8 +65,9 @@ export default class Memories extends React.Component {
   }
 
   async fetchMemories() {
+    
     var context = this;
-    this.setState({searching: false});
+    
     try {
       var token =  await AsyncStorage.getItem(STORAGE_KEY);
     } catch (error) {
@@ -87,17 +93,29 @@ export default class Memories extends React.Component {
   }
 
   async search() {
+    var query = this.state.searchQuery;
+    if (this.state.searchTerm === '') {
+      return;
+    }
+    
+    query.push(this.state.searchTerm);
+    this.setState({searchQuery: query});
+
     var context = this;
     try {
       var token =  await AsyncStorage.getItem(STORAGE_KEY);
     } catch (error) {
       console.log('AsyncStorage error: ' + error.message);
     }
-    fetch(config.domain + '/api/memories/search/' + this.state.searchQuery.toLowerCase(), {
-      method: 'GET',
+    fetch(config.domain + '/api/memories/search', {
+      method: 'POST',
       headers: {
-        'Authorization': 'Bearer ' + token
-      }
+        'Authorization': 'Bearer ' + token,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        searchParameter: this.state.searchQuery
+      })
     }).then(function(memories) {
       var memoryArray = JSON.parse(memories['_bodyInit']);
       var images = memoryArray.map(memory => {
@@ -109,11 +127,38 @@ export default class Memories extends React.Component {
       context.setState({
         queryList: images,
         searching: true,
-        searchQuery: ''});
+        searchTerm: ''});
     })
   }
 
+  async removeAndPartialSearch(index) {
+    
+    this.state.searchQuery.splice(index,1);
+    if (this.state.searchQuery.length === 0) {
+      this.setState({searching: false});
+    }
+    this.setState({searchQuery: this.state.searchQuery});
+    this.fetchMemories();
+  }
+
+  async cancelSearch() {
+    this.setState({searching: false});
+    this.setState({searchQuery: []});
+    this.fetchMemories();
+  }
+
   render() {
+    var context = this;
+    var searchQueueNode = this.state.searchQuery.map(function(term, index) {
+      return (
+        <Button key={index} onPress={context.removeAndPartialSearch.bind(context,index)} style={styles.tag} rounded info>
+          <Text key={index} style={styles.tagText}>
+          {term}  <Ionicons name="ios-close" size={25} color="#444" />
+          </Text>
+        </Button>
+      )           
+    })
+
     return (
       <View>
         {
@@ -129,7 +174,7 @@ export default class Memories extends React.Component {
             </Header>
           ) : null
         }
-
+        
         <ScrollableTabView
           style={{marginTop: 0, }}
           initialPage={0}
@@ -147,8 +192,8 @@ export default class Memories extends React.Component {
               <InputGroup borderType='rounded' style={{width: 250}}>
                   <Input 
                     placeholder='Search'
-                    onChangeText={(text) => this.setState({searchQuery: text})}
-                    value={this.state.searchQuery}
+                    onChangeText={(text) => this.setState({searchTerm: text})}
+                    value={this.state.searchTerm}
                   />
               </InputGroup>
               <Button rounded style={{backgroundColor: '#25a2c3', marginLeft: 5}} onPress={this.search.bind(this)}>
@@ -157,27 +202,36 @@ export default class Memories extends React.Component {
               {
                 this.state.searching ? (
                   <Button rounded bordered style={{borderColor: '#ccc', marginLeft: 5}} 
-                          onPress={this.fetchMemories.bind(this)}>
+                          onPress={this.cancelSearch.bind(this)}>
                     <Text style={{color: '#444'}}>Cancel</Text>
                   </Button>
                 ) : null
               }
             </View>
-              {
-                this.state.searching ? (
-                  this.state.queryList.map((image, i) => 
+            <View style={{flexDirection:'column'}}>
+              <View>
+                <View style={styles.tagsContainer}>
+                  {searchQueueNode}
+                </View>
+              </View>
+              <View style={{flexDirection: 'row'}}>
+                {
+                  this.state.searching ? (
+                    this.state.queryList.map((image, i) => 
+                      <TouchableHighlight key={i} onPress={this._navigate.bind(this, image)}>
+                        <Image key={i} style={styles.thumbnail} resizeMode={Image.resizeMode.contain} source={{uri: image.uri}}/>
+                      </TouchableHighlight>
+                    )
+                  )
+                  :
+                  this.state.imageList.map((image, i)=> 
                     <TouchableHighlight key={i} onPress={this._navigate.bind(this, image)}>
                       <Image key={i} style={styles.thumbnail} resizeMode={Image.resizeMode.contain} source={{uri: image.uri}}/>
                     </TouchableHighlight>
                   )
-                )
-                :
-                this.state.imageList.map((image, i)=> 
-                  <TouchableHighlight key={i} onPress={this._navigate.bind(this, image)}>
-                    <Image key={i} style={styles.thumbnail} resizeMode={Image.resizeMode.contain} source={{uri: image.uri}}/>
-                  </TouchableHighlight>
-                )
-              }
+                }
+              </View>
+            </View>
             </Content>
           </ScrollView>
 
@@ -201,7 +255,26 @@ const styles = StyleSheet.create({
     width: 90,
     height: 90,
     margin: 1
+  },
+
+  tag: {
+    margin: 10
+  },
+
+  tagText: {
+    ...Font.style('pacifico'),
+    fontSize: 16,
+    letterSpacing: 1
+  },
+
+  tagsContainer: {
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 10,
   }
+
 });
 
 /*

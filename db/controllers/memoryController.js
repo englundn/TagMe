@@ -170,17 +170,23 @@ exports.storeTags = function(req, res) {
 // TODO: deal with tags that have multiple words
 exports.searchMemories = function(req, res) {
   console.log('username', req.user.username);
-  var searchTerm = req.params.query;
-  searchTerm = searchTerm.replace('_', ' ');
+  var searchTerm = req.body.searchParameter;
+  console.log(req.body);
+  searchTerm.forEach(function(term) {
+    term = term.toLowerCase().replace('_', ' ');
+  })
+
   User.findOne({username: req.user.username}).populate('memories').then(function(user) {
     console.log('user', user);
     var memsWithTags = user.memories.filter(function(memory) {
       var found = false; 
-
+      
       memory.tags.forEach(function(tag) {
-        if (_.includes(tag, searchTerm)) {
-          found = true;
-        }
+        searchTerm.forEach(function(term) {
+          if (_.includes(tag, term)) {
+            found = true;
+          }
+        })
       });
       return found; 
     });
