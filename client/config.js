@@ -1,3 +1,4 @@
 module.exports = {
-  domain: 'http://localhost:3000'
+  domain: 'http://tagmelegacy.herokuapp.com'
+  // domain: 'http://localhost:3000'
 };
