@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/IndecipherableSuggestions/TagMeLegacy#readme",
   "dependencies": {
+    "bcrypt": "^0.8.7",
     "body-parser": "^1.15.2",
     "chai": "^3.5.0",
     "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor",
