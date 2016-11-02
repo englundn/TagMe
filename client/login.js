@@ -23,7 +23,8 @@ export default class Login extends React.Component {
       fontLoaded: false,
       username: '',
       password: '',
-      rememberSwitchBool: false
+      rememberSwitchBool: false,
+      isUserSaved: false
     }
   }
 
@@ -71,7 +72,10 @@ export default class Login extends React.Component {
           context._navigate(JSON.parse(response._bodyText).username);
         });
     }).catch(function(err) {
-        context.setState({ fontLoaded: true });
+        context.setState({ 
+          fontLoaded: true,
+          isUserSaved: true,
+        });
     })
   }
 
@@ -168,38 +172,42 @@ export default class Login extends React.Component {
             </View>
             ) : null
           }
-          <List style={{marginRight:20}}>
-            <ListItem>
-              <InputGroup>
-                <Input
-                  placeholder='USERNAME'
-                  placeholderTextColor='#444'
-                  onChangeText={(text) => this.setState({username: text})}
-                  value={this.state.username}
-                  style={styles.formText}
-                />
-              </InputGroup>
-            </ListItem>
-            <ListItem>
-              <InputGroup>
-                <Input
-                  placeholder='PASSWORD'
-                  placeholderTextColor='#444'
-                  secureTextEntry={true}
-                  onChangeText={(text) => this.setState({password: text})}
-                  value={this.state.password}
-                  style={styles.formText}
-                />
-              </InputGroup>
-            </ListItem>
-            <ListItem>
-              <Text style={styles.sFormText}>Remember Deivce</Text>
-              <Switch
-                onValueChange={(value) => this.setState({rememberSwitchBool: value})}
-                style={{marginLeft: 10}}
-                value={this.state.rememberSwitchBool} />
-            </ListItem>
-          </List>
+          {
+            this.state.isUserSaved ? (
+              <List style={{marginRight:20}}>
+                <ListItem>
+                  <InputGroup>
+                    <Input
+                      placeholder='USERNAME'
+                      placeholderTextColor='#444'
+                      onChangeText={(text) => this.setState({username: text})}
+                      value={this.state.username}
+                      style={styles.formText}
+                    />
+                  </InputGroup>
+                </ListItem>
+                <ListItem>
+                  <InputGroup>
+                    <Input
+                      placeholder='PASSWORD'
+                      placeholderTextColor='#444'
+                      secureTextEntry={true}
+                      onChangeText={(text) => this.setState({password: text})}
+                      value={this.state.password}
+                      style={styles.formText}
+                    />
+                  </InputGroup>
+                </ListItem>
+                <ListItem>
+                  <Text style={styles.sFormText}>Remember Deivce</Text>
+                  <Switch
+                    onValueChange={(value) => this.setState({rememberSwitchBool: value})}
+                    style={{marginLeft: 10}}
+                    value={this.state.rememberSwitchBool} />
+                </ListItem>
+              </List>
+            ) : null
+          }
           {
             this.state.fontLoaded ? (
             <View style={styles.buttonsContainer}>
