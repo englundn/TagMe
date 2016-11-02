@@ -4,7 +4,8 @@ import {
   Text,
   View,
   AsyncStorage,
-  Modal
+  Modal,
+  TextInput
 } from 'react-native';
 import { Font } from 'exponent';
 import { Container, Content, Button } from 'native-base';
@@ -16,7 +17,9 @@ export default class ModalView extends React.Component {
     super(props);
     this.state = {
       modalVisible: false,
-      filteredTags: []
+      filteredTags: [],
+      customTag: '',
+      modalTags: props.tags
     };
   }
 
@@ -42,6 +45,14 @@ export default class ModalView extends React.Component {
     updatedTags.push(tag);
     this.setState({
       filteredTags: updatedTags
+    });
+  }
+
+  addCustomTag() {
+    var allTags = this.state.modalTags;
+    allTags.push(this.state.customTag);
+    this.setState({
+      modalTags: allTags
     });
   }
 
@@ -82,7 +93,7 @@ export default class ModalView extends React.Component {
             <View>
               <View style={styles.tagsContainer}>
               {
-                this.props.tags.map((tag, i) => {
+                this.state.modalTags.map((tag, i) => {
                   return (
                      <Tag key={i}
                       name={tag}
@@ -95,8 +106,17 @@ export default class ModalView extends React.Component {
               }
               </View>
             </View>
-            <View>
-              <Button success onPress={this.onSubmit.bind(this)} style={styles.button}>
+            <View style={styles.customTagContainer}>
+              <TextInput
+                placeholderTextColor='#444'
+                onChangeText={(text) => this.setState({customTag: text})}
+                multiline={true}
+                style={{height: 40, width: 120, margin: 20, borderColor: 'grey', borderRightWidth: 0, borderLeftWidth: 0, borderBottomWidth: 1, textAlign: 'center'}}
+              />
+              <Button primary onPress={this.addCustomTag.bind(this)} style={styles.button}>
+                <Text style={styles.buttonText}> + </Text>
+              </Button>
+              <Button primary onPress={this.onSubmit.bind(this)} style={styles.button}>
                 <Text style={styles.buttonText}>Save</Text>
               </Button>
             </View>
@@ -157,6 +177,13 @@ const styles = StyleSheet.create({
 
   modalContent: {
     marginTop: 20,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  customTagContainer: {
+    flexDirection: 'row',
+    marginTop: 50,
     justifyContent: 'center',
     alignItems: 'center'
   },
