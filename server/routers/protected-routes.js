@@ -39,6 +39,6 @@ router.route('/id/:id').get(memoryController.fetchOne);
 router.route('/id/:id').post(jsonParser, memoryController.storeTags);
 
 //User searches for a specific tag
-router.route('/search/:query').get(memoryController.searchMemories);
+router.route('/search').post(memoryController.searchMemories);
 
 module.exports = router;
