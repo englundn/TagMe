@@ -49,15 +49,11 @@ export default class ModalView extends React.Component {
   }
 
   addCustomTag() {
-    // filteredTags: [],
-    // customTag: '',
-    // modalTags: props.tags
     var allTags = this.state.modalTags;
     allTags.push(this.state.customTag);
     this.setState({
       modalTags: allTags
     });
-    // this.addTag(this.state.customTag);
   }
 
   removeTag(tag) {
