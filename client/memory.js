@@ -3,8 +3,11 @@ import {
   StyleSheet,
   View,
   Text,
+  TextInput,
   AsyncStorage,
-  Image
+  ScrollView,
+  Image,
+  Modal
 } from 'react-native';
 import { Font } from 'exponent';
 import ModalView from './tagsModal';
@@ -23,7 +26,8 @@ export default class Memory extends React.Component {
       filteredTags: [],
       status: false,
       databaseId: '',
-      caption: ''
+      caption: '',
+      captionModalVisible: false
     };
   }
 
@@ -50,11 +54,16 @@ export default class Memory extends React.Component {
     }
   }
 
-  async editCaption() {
-    
+  async openEditCaption() {
+    this.setState({captionModalVisible: true});
+  }
+
+  async closeEditCaption() {
+    this.setState({captionModalVisible: false});
   }
 
   async saveCaption(newCaption) {
+    var context = this;
     try {
       var token =  await AsyncStorage.getItem(STORAGE_KEY);
     } catch (error) {
@@ -71,6 +80,9 @@ export default class Memory extends React.Component {
         tags: null,
         caption: newCaption
       })
+    }).then(function(){
+      context.setState({caption: newCaption});
+      context.closeEditCaption();
     }).catch(function(err) {
       
     })
@@ -224,8 +236,16 @@ export default class Memory extends React.Component {
             }
           }>
           <Image style={styles.image} resizeMode={Image.resizeMode.contain} source={{uri: this.state.image.uri}}/>
-            <Text onPress={this.saveCaption.bind(this)} style={styles.caption}>{this.state.caption}</Text>
-            <CaptionEditor saveCaption={this.saveCaption.bind(this)} captions={this.state.caption} />
+            <Text onPress={this.openEditCaption.bind(this)} style={styles.caption}>{this.state.caption}</Text>
+            <Ionicons name="ios-edit" size={40} color="#444" />
+              <Modal
+                animationType={'slide'}
+                transparent={true}
+                visible={this.state.captionModalVisible}
+                onRequestClose={() => { alert('Modal has been closed.'); }}
+              >
+                <CaptionEditor saveCaption={this.saveCaption.bind(this)} cancelEdit={this.closeEditCaption.bind(this)} captions={this.state.caption} />
+              </Modal>
           <MemoryDetails 
             status={this.state.status} 
             tags={this.state.filteredTags}
@@ -280,29 +300,47 @@ class CaptionEditor extends React.Component {
 
   render() {
     return (
-      <View>
-        <View>
-          <InputGroup>
-                <Input
-                  placeholderTextColor='#444'
-                  onChangeText={(text) => this.setState({caption: text})}
-                  style={styles.captionInput}
-                />
-          </InputGroup>
-        </View>
-        <View style={styles.buttonsContainer}>
-          <Button primary style={styles.button} onPress={this.saveCaption.bind(this)}>
-            <Text style={styles.buttonText}>
-              Save
-            </Text>
-          </Button>
-        </View>
-      </View>
+      <ScrollView contentContainerStyle={styles.modal}>
+          <Text style={styles.caption}>Type Here to edit caption</Text>
+          <TextInput
+            placeholderTextColor='#444'
+            onChangeText={(text) => this.setState({caption: text})}
+            multiline={true}
+            style={{height: 40, margin: 20, borderColor: 'grey', borderRightWidth: 0, borderLeftWidth: 0, borderBottomWidth: 1, textAlign: 'center'}}
+          />
+          <View style={styles.buttonsContainer}>
+            <Button primary style={styles.button} onPress={this.saveCaption.bind(this)}>
+              <Text style={styles.buttonText}>
+                Save
+              </Text>
+            </Button>
+            <Button primary style={styles.button} onPress={this.props.cancelEdit}>
+              <Text style={styles.buttonText}>
+                Cancel
+              </Text>
+            </Button>
+          </View>
+      </ScrollView>
     )
   }
 }
 
 const styles = StyleSheet.create({
+  modal: {
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    flex:1,
+    flexDirection:'column',
+    alignItems:'center',
+    justifyContent:'center'
+  },
+
+  editGroup: {
+    flex:1,
+    flexDirection:'column',
+    alignItems:'center',
+    justifyContent:'center'
+  },
+
   headerText: {
     ...Font.style('pacifico'),
     fontSize: 30,
