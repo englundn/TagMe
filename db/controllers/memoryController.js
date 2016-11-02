@@ -133,21 +133,31 @@ exports.storeTags = function(req, res) {
 
   Memory.findOne({ _id: req.params.id }).then(function(memory) {
     if (req.body.tags === null) {
-      console.log(req.body);
       memory.analyses[2].tags[0] = req.body.caption;
+      Memory.update({ _id: req.params.id }, { $set: { analyses: memory.analyses}}, function(err) {
+        if (err) {
+          console.log('Error saving tags:', err);
+          res.sendStatus(404);
+        }
+        
+        res.sendStatus(201);
+      })
+      //memory.analyses[2].tags[0] = req.body.caption;
+
     } else {
       memory.tags = req.body.tags;
+      memory.save(function(err) {
+        console.log(memory);
+        if (err) {
+          console.log('Error saving tags:', err);
+          res.sendStatus(404);
+        }
+
+        res.sendStatus(201);
+      });
     }
     //
-    memory.save(function(err) {
-      console.log(memory);
-      if (err) {
-        console.log('Error saving tags:', err);
-        res.sendStatus(404);
-      }
 
-      res.sendStatus(201);
-    });
   }).catch(function(err) {
     console.log('Error retrieving memory with ID:', req.params.id);
     res.status(404).send();
