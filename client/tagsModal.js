@@ -82,9 +82,9 @@ export default class ModalView extends React.Component {
             <View>
               <View style={styles.tagsContainer}>
               {
-                this.props.tags.map((tag, index) => {
+                this.props.tags.map((tag, i) => {
                   return (
-                     <Tag 
+                     <Tag key={i}
                       name={tag}
                       addTag={this.addTag.bind(this)}
                       removeTag={this.removeTag.bind(this)}
