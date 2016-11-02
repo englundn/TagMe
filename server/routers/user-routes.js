@@ -13,6 +13,10 @@ router.route('/login')
 router.route('/signup')
   .post(userController.signup);
 
- 
+router.route('/saved')
+  .post(userController.saved);
+
+router.route('/logout')
+  .post(userController.logout);
 
 module.exports = router;

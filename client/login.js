@@ -3,6 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Switch,
   Image,
   AlertIOS,
   AsyncStorage
@@ -11,6 +12,7 @@ import { Font } from 'exponent';
 import { Container, Header, Title, Content, Footer, Button, List, ListItem, Input, InputGroup } from 'native-base';
 import { Ionicons } from '@exponent/vector-icons';
 import config from './config';
+import Exponent from 'exponent';
 
 var STORAGE_KEY = 'id_token';
 
@@ -20,7 +22,8 @@ export default class Login extends React.Component {
     this.state = {
       fontLoaded: false,
       username: '',
-      password: ''
+      password: '',
+      rememberSwitchBool: false
     }
   }
 
@@ -29,7 +32,8 @@ export default class Login extends React.Component {
       'pacifico': require('./assets/fonts/Pacifico.ttf'),
       'montserrat': require('./assets/fonts/Montserrat-Regular.ttf')
     });
-    this.setState({ fontLoaded: true });
+    this.checkUserIsSaved()
+    
   }
 
   _navigate(username) {
@@ -50,8 +54,30 @@ export default class Login extends React.Component {
     }
   }
 
+  checkUserIsSaved() {
+    var context = this;
+    fetch(config.domain + '/api/users/saved', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        deviceId: Exponent.Constants.deviceId
+      })
+    }).then(function(response) {
+      var token = JSON.parse(response._bodyText).id_token;
+      return context._onValueChange(STORAGE_KEY, token)
+        .then(function() {
+          context._navigate(JSON.parse(response._bodyText).username);
+        });
+    }).catch(function(err) {
+        context.setState({ fontLoaded: true });
+    })
+  }
+
   login() {
     var context = this;
+    var deviceId = this.state.rememberSwitchBool ? Exponent.Constants.deviceId : null;
 
     if (this.state.username && this.state.password) {
       fetch(config.domain + '/api/users/login', {
@@ -61,7 +87,8 @@ export default class Login extends React.Component {
         },
         body: JSON.stringify({
           username: this.state.username,
-          password: this.state.password
+          password: this.state.password,
+          deviceId: deviceId
         })
       })
       .then(function(response) {
@@ -84,6 +111,7 @@ export default class Login extends React.Component {
 
   signup() {
     var context = this;
+    var deviceId = this.state.rememberSwitchBool ? Exponent.Constants.deviceId : null;
 
     if (this.state.username && this.state.password) {
       fetch(config.domain + '/api/users/signup', {
@@ -93,7 +121,8 @@ export default class Login extends React.Component {
         },
         body: JSON.stringify({
           username: this.state.username,
-          password: this.state.password
+          password: this.state.password,
+          deviceId: deviceId
         })
       })
       .then(function(response) {
@@ -162,6 +191,13 @@ export default class Login extends React.Component {
                   style={styles.formText}
                 />
               </InputGroup>
+            </ListItem>
+            <ListItem>
+              <Text style={styles.sFormText}>Remember Deivce</Text>
+              <Switch
+                onValueChange={(value) => this.setState({rememberSwitchBool: value})}
+                style={{marginLeft: 10}}
+                value={this.state.rememberSwitchBool} />
             </ListItem>
           </List>
           {
@@ -245,6 +281,11 @@ const styles = StyleSheet.create({
 
   formText: {
     fontSize: 17,
+    color: '#333'
+  },
+  
+  sFormText: {
+    fontSize: 13,
     color: '#333'
   },
 

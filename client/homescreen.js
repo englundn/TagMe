@@ -58,9 +58,23 @@ export default class Homescreen extends React.Component {
   }
 
   logout() {
+    var context = this;
     this._userLogout()
     .then(()=> {
-      this._navigateLogout();
+      fetch(config.domain + '/api/users/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          deviceId: Exponent.Constants.deviceId
+        })
+      }).then(function(response) {
+        console.log("test");
+        context._navigateLogout();
+      }).catch(function(err) {
+        context._navigateLogout();
+      })
     })
     .catch((err)=> {
       console.log('error logging out', err);
