@@ -7,6 +7,7 @@ import {
   View,
   TouchableHighlight
 } from 'react-native';
+import { Container, Header, Title, Content, Footer, Button, Spinner, Input, InputGroup} from 'native-base';
 
 import {AudioRecorder, AudioUtils} from 'react-native-audio';
 
@@ -45,16 +46,10 @@ class AudioButton extends Component {
     }
 
     _renderButton() {
-      // var style = (active) ? styles.activeButtonText : styles.buttonText;
+      var style = styles.buttonText;
       var context = this;
       var title, onPress, active;
       var includeDelete = false;
-      currentTime: 0.0,
-      recording: false,
-      stoppedRecording: false,
-      stoppedPlaying: false,
-      playing: false,
-      finished: false
       //initial state
       if (this.state.recording) {
         title = 'Stop';
@@ -86,24 +81,28 @@ class AudioButton extends Component {
       }
 
       return !includeDelete ? (
-        <TouchableHighlight style={styles.button} onPress={onPress}>
-          <Text style={style}>
-            {title}
-          </Text>
-        </TouchableHighlight>
+        <View>
+          <TouchableHighlight style={styles.button} onPress={onPress}>
+            <Text style={style}>
+              {title}
+            </Text>
+          </TouchableHighlight>
+        </View>
       ) : (
-        <TouchableHighlight style={styles.button} onPress={onPress}>
-          <Text style={style}>
-            {title}
-          </Text>
-        </TouchableHighlight>
-        <TouchableHighlight style={styles.button} onPress={function() {
-          context.setState({delete: true});
-        }}>
-          <Text style={style}>
-            Delete
-          </Text>
-        </TouchableHighlight>
+        <View>
+          <TouchableHighlight style={styles.button} onPress={onPress}>
+            <Text style={style}>
+              {title}
+            </Text>
+          </TouchableHighlight>
+          <TouchableHighlight style={styles.button} onPress={function() {
+            context.setState({delete: true});
+          }}>
+            <Text style={style}>
+              Delete
+            </Text>
+          </TouchableHighlight>
+        </View>
       );
     }
 
@@ -151,11 +150,7 @@ class AudioButton extends Component {
       return (
         <View style={styles.container}>
           <View style={styles.controls}>
-            {this._renderButton("RECORD", () => {this._record()}, this.state.recording )}
-            {this._renderButton("STOP", () => {this._stop()} )}
-            {this._renderButton("PAUSE", () => {this._pause()} )}
-            {this._renderButton("PLAY", () => {this._play()}, this.state.playing )}
-            <Text style={styles.progressText}>{this.state.currentTime}s</Text>
+            {this._renderButton()}
           </View>
         </View>
       );
