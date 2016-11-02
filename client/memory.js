@@ -150,6 +150,11 @@ export default class Memory extends React.Component {
       }
       var analyses = _.uniq(microsoftTags.concat(clarifaiTags));
       var savedTags = memory.tags;
+      for (var i = 0; i < savedTags.length; i++) {
+        if (analyses.indexOf(savedTags[i]) === -1) {
+          analyses.push(savedTags[i]);
+        }
+      }
       var date = new Date(memory.createdAt).toString().slice(0, 15);
       context.setState({
         tags: analyses, 
