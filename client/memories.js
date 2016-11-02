@@ -154,16 +154,16 @@ export default class Memories extends React.Component {
         }}>
           {
             this.state.searching ? (
-              this.state.queryList.map(image => 
-                <TouchableHighlight onPress={this._navigate.bind(this, image)}>
-                  <Image style={styles.thumbnail} resizeMode={Image.resizeMode.contain} source={{uri: image.uri}}/>
+              this.state.queryList.map((image, i) => 
+                <TouchableHighlight key={i} onPress={this._navigate.bind(this, image)}>
+                  <Image key={i} style={styles.thumbnail} resizeMode={Image.resizeMode.contain} source={{uri: image.uri}}/>
                 </TouchableHighlight>
               )
             )
             :
-            this.state.imageList.map(image => 
-              <TouchableHighlight onPress={this._navigate.bind(this, image)}>
-                <Image style={styles.thumbnail} resizeMode={Image.resizeMode.contain} source={{uri: image.uri}}/>
+            this.state.imageList.map((image, i)=> 
+              <TouchableHighlight key={i} onPress={this._navigate.bind(this, image)}>
+                <Image key={i} style={styles.thumbnail} resizeMode={Image.resizeMode.contain} source={{uri: image.uri}}/>
               </TouchableHighlight>
             )
           }
