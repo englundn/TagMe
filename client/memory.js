@@ -31,11 +31,12 @@ export default class Memory extends React.Component {
     };
   }
 
-   _navigate() {
+   _navigate(page, tag) {
     this.props.navigator.push({
-      name: 'Homescreen',
+      name: page ? page : 'Homescreen',
       passProps: {
-        'username': this.props.username
+        'username': this.props.username,
+        'tag': tag ? tag : null
       }
     });
   }
@@ -207,6 +208,11 @@ export default class Memory extends React.Component {
     })
   }
 
+  async navigateToSingleTag(tag) {
+    //tag is the single tag
+    this._navigate('Memories', tag)
+  }
+
   render() {
     var loading = this.state.status ? 
       <ModalView 
@@ -251,6 +257,7 @@ export default class Memory extends React.Component {
           <MemoryDetails 
             status={this.state.status} 
             tags={this.state.filteredTags}
+            navigateToSingleTag={this.navigateToSingleTag.bind(this)}
           />
           {loading}
         </Content>
@@ -264,7 +271,12 @@ class MemoryDetails extends React.Component {
     super(props);
   }
 
+  navigateToTag(tag) {
+    this.props.navigateToSingleTag(tag)
+  }
+
   render() {
+    var context = this;
     var loading = !this.props.status ?
       <Spinner 
         color='red' 
@@ -278,7 +290,7 @@ class MemoryDetails extends React.Component {
         <View style={styles.tagsContainer}>
           {
             this.props.tags.map((tag, i) =>
-              <Button key={i} style={styles.tag} rounded info><Text key={i} style={styles.tagText}>{tag}</Text></Button>
+              <Button onPress={context.navigateToTag.bind(this, tag)} key={i} style={styles.tag} rounded info><Text key={i} style={styles.tagText}>{tag}</Text></Button>
             )
           }
         </View>
@@ -373,7 +385,6 @@ const styles = StyleSheet.create({
   },
 
   captionContainer: {
-    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
   },
