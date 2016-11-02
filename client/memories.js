@@ -3,6 +3,7 @@ import {
   StyleSheet,
   AsyncStorage,
   View,
+  ScrollView,
   Text,
   TouchableHighlight,
   Image
@@ -10,6 +11,8 @@ import {
 import { Font } from 'exponent';
 import { Container, Header, Title, Content, Footer, InputGroup, Input, Button } from 'native-base';
 import { Ionicons } from '@exponent/vector-icons';
+import ScrollableTabView, { ScrollableTabBar, } from 'react-native-scrollable-tab-view';
+// import ScrollableTabView, { DefaultTabBar, } from 'react-native-scrollable-tab-view';
 import config from './config';
 
 var STORAGE_KEY = 'id_token';
@@ -112,63 +115,76 @@ export default class Memories extends React.Component {
 
   render() {
     return (
-      <Container>
+      <View>
         {
           this.state.fontLoaded ? (
-        <Header>
-          <Button transparent onPress={() => this.props.navigator.pop()}>
-            <Ionicons name="ios-arrow-back" size={32} style={{color: '#25a2c3', marginTop: 5}}/>
-          </Button>
-          <Title style={styles.headerText}>{this.props.username}'s Memories</Title>
-          <Button transparent onPress={this._navigateHome.bind(this)}>
-              <Ionicons name="ios-home" size={35} color="#444" />
-          </Button>
-        </Header>
+            <Header>
+              <Button transparent onPress={() => this.props.navigator.pop()}>
+                <Ionicons name="ios-arrow-back" size={32} style={{color: '#25a2c3', marginTop: 5}}/>
+              </Button>
+              <Title style={styles.headerText}>{this.props.username}'s Memories</Title>
+              <Button transparent onPress={this._navigateHome.bind(this)}>
+                  <Ionicons name="ios-home" size={35} color="#444" />
+              </Button>
+            </Header>
           ) : null
         }
-        <View style={{flexDirection: 'row', margin: 10}}>
-          <InputGroup borderType='rounded' style={{width: 250}}>
-              <Input 
-                placeholder='Search'
-                onChangeText={(text) => this.setState({searchQuery: text})}
-                value={this.state.searchQuery}
-              />
-          </InputGroup>
-          <Button rounded style={{backgroundColor: '#25a2c3', marginLeft: 5}} onPress={this.search.bind(this)}>
-            <Ionicons name='ios-search' size={25} color="#fff"/>
-          </Button>
-          {
-              this.state.searching ? (
-                <Button rounded bordered style={{borderColor: '#ccc', marginLeft: 5}} 
-                        onPress={this.fetchMemories.bind(this)}>
-                  <Text style={{color: '#444'}}>Cancel</Text>
-                </Button>
-            ) : null
-          }
-        </View>
-        <Content contentContainerStyle={{
-          flexWrap: 'wrap',
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}>
-          {
-            this.state.searching ? (
-              this.state.queryList.map((image, i) => 
-                <TouchableHighlight key={i} onPress={this._navigate.bind(this, image)}>
-                  <Image key={i} style={styles.thumbnail} resizeMode={Image.resizeMode.contain} source={{uri: image.uri}}/>
-                </TouchableHighlight>
-              )
-            )
-            :
-            this.state.imageList.map((image, i)=> 
-              <TouchableHighlight key={i} onPress={this._navigate.bind(this, image)}>
-                <Image key={i} style={styles.thumbnail} resizeMode={Image.resizeMode.contain} source={{uri: image.uri}}/>
-              </TouchableHighlight>
-            )
-          }
-        </Content>
-      </Container>
+
+        <ScrollableTabView
+          style={{marginTop: 0, }}
+          initialPage={0}
+          tabBarPosition='top'
+          renderTabBar={() => <ScrollableTabBar activeTextColor="#25a2c3" underlineStyle={{ backgroundColor:"#25a2c3"}}/>} >
+
+          <ScrollView tabLabel='Photos'>
+            <Content contentContainerStyle={{
+              flexWrap: 'wrap',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}>
+            <View style={{flexDirection: 'row', margin: 10}}>
+              <InputGroup borderType='rounded' style={{width: 250}}>
+                  <Input 
+                    placeholder='Search'
+                    onChangeText={(text) => this.setState({searchQuery: text})}
+                    value={this.state.searchQuery}
+                  />
+              </InputGroup>
+              <Button rounded style={{backgroundColor: '#25a2c3', marginLeft: 5}} onPress={this.search.bind(this)}>
+                <Ionicons name='ios-search' size={25} color="#fff"/>
+              </Button>
+              {
+                this.state.searching ? (
+                  <Button rounded bordered style={{borderColor: '#ccc', marginLeft: 5}} 
+                          onPress={this.fetchMemories.bind(this)}>
+                    <Text style={{color: '#444'}}>Cancel</Text>
+                  </Button>
+                ) : null
+              }
+            </View>
+              {
+                this.state.searching ? (
+                  this.state.queryList.map((image, i) => 
+                    <TouchableHighlight key={i} onPress={this._navigate.bind(this, image)}>
+                      <Image key={i} style={styles.thumbnail} resizeMode={Image.resizeMode.contain} source={{uri: image.uri}}/>
+                    </TouchableHighlight>
+                  )
+                )
+                :
+                this.state.imageList.map((image, i)=> 
+                  <TouchableHighlight key={i} onPress={this._navigate.bind(this, image)}>
+                    <Image key={i} style={styles.thumbnail} resizeMode={Image.resizeMode.contain} source={{uri: image.uri}}/>
+                  </TouchableHighlight>
+                )
+              }
+            </Content>
+          </ScrollView>
+
+          <ScrollView tabLabel='Tags'></ScrollView>
+
+        </ScrollableTabView>
+      </View>
     );
   }
 }
