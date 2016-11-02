@@ -2,6 +2,7 @@ var expect = require('chai').expect;
 var request = require('request');
 var fs = require('fs');
 var FormData = require('form-data');
+var bcrypt = require('bcrypt');
 
 var User = require('../db/models/userModel');
 
@@ -94,7 +95,7 @@ describe('Unprotected routes: ', function() {
               });
             };
 
-            comparePassword(user.password, 'Phillip', function(isMatch) {
+            comparePassword('Phillip', user.password, function(isMatch) {
               expect(isMatch).to.be.true;
             });
 
@@ -149,7 +150,7 @@ describe('Unprotected routes: ', function() {
 
   });
 
-  describe('Memory creation', function() {
+  xdescribe('Memory creation', function() {
    
     var signUpOptions = {
       method: 'POST',
@@ -195,11 +196,11 @@ describe('Unprotected routes: ', function() {
     });
   });
 
-  describe('Memory access', function() {
+  xdescribe('Memory access', function() {
     it ('should return the details of a memory given an id', function(done) {
       var accessOneOptions = {
         method: 'GET',
-        url: 'http://tagmelegacy.herokuapp.com/api/memories/id/5816923fc196a000184ae43a',
+        url: 'http://tagmelegacy.herokuapp.com/api/memories/id/581a146e53f50e00181d7cfe',
         headers: {
           'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ODBmYzdiMTZhYWE2ODM2OTk2NDc5MTQiLCJ1c2VybmFtZSI6Im5ldyIsInBhc3N3b3JkIjoidXNlciIsIl9fdiI6MCwibWVtb3JpZXMiOltdfQ.VfV0DtedVfOUZNAM6fOrMQCakF6Zrcbk-ujie0YGvd4'
         },
