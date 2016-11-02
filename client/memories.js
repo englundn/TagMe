@@ -3,6 +3,7 @@ import {
   StyleSheet,
   AsyncStorage,
   View,
+  ListView,
   ScrollView,
   AlertIOS,
   Text,
@@ -17,6 +18,8 @@ import ScrollableTabView, { ScrollableTabBar, } from 'react-native-scrollable-ta
 import config from './config';
 
 var STORAGE_KEY = 'id_token';
+var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
 
 export default class Memories extends React.Component {
   constructor(props) {
@@ -70,6 +73,7 @@ export default class Memories extends React.Component {
     
     try {
       var token =  await AsyncStorage.getItem(STORAGE_KEY);
+      console.log(token);
     } catch (error) {
       console.log('AsyncStorage error: ' + error.message);
     }
@@ -89,6 +93,20 @@ export default class Memories extends React.Component {
         };
       });
       context.setState({imageList: images});
+      console.log(images);
+      var allTags = memoryArray.map(memory => {
+        return memory.tags;
+      }).reduce((a, b) => {return a.concat(b)}, []);
+
+      var tagsCount = {};
+      allTags.forEach(a => { tagsCount[a] = (tagsCount[a] || 0) + 1; });
+
+      var newres = [];
+      for (var key in tagsCount) {
+        newres.push({'name': key, 'count': tagsCount[key] + ''});
+      }
+      console.log(newres);
+      context.setState({tagsCount: ds.cloneWithRows(newres)});
     });
   }
 
@@ -145,6 +163,13 @@ export default class Memories extends React.Component {
     this.setState({searching: false});
     this.setState({searchQuery: []});
     this.fetchMemories();
+  }
+
+  _renderRow(rowData) {
+    return (<View style={{height:70,borderBottomColor: '#ededed', borderBottomWidth:1, paddingLeft:10, paddingTop:10}}>
+              <Text style={{fontSize:22}}>{rowData.name}</Text>
+              <Text style={{color: '#666'}}>{rowData.count}</Text>
+            </View> )
   }
 
   render() {
@@ -235,7 +260,9 @@ export default class Memories extends React.Component {
             </Content>
           </ScrollView>
 
-          <ScrollView tabLabel='Tags'></ScrollView>
+          <ScrollView tabLabel='Tags'>
+            <ListView dataSource={this.state.tagsCount} renderRow={this._renderRow}></ListView>
+          </ScrollView>
 
         </ScrollableTabView>
       </View>
