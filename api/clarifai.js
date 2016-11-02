@@ -15,5 +15,3 @@ module.exports = function(pubUrl) {
     console.log('error requresting from clarifai', err);
   });
 };
-
-module.exports('https://s3-us-west-1.amazonaws.com/indecipherablesuggestions/images/6a9d969d-384a-401f-b072-abb810f19310.jpg');
