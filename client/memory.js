@@ -275,8 +275,8 @@ class MemoryDetails extends React.Component {
       <View>
         <View style={styles.tagsContainer}>
           {
-            this.props.tags.map(tag =>
-              <Button style={styles.tag} rounded info><Text style={styles.tagText}>{tag}</Text></Button>
+            this.props.tags.map((tag, i) =>
+              <Button key={i} style={styles.tag} rounded info><Text key={i} style={styles.tagText}>{tag}</Text></Button>
             )
           }
         </View>
