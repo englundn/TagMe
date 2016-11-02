@@ -17,6 +17,16 @@ var hashPassword = function(pw, callback) {
   });
 };
 
+var comparePassword = function(pw, hash, callback) {
+  bcrypt.compare(pw, hash, function(err, match) {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    callback(match);
+  });
+};
+
 describe('Unprotected routes: ', function() {
 
   beforeEach(function(done) {
@@ -84,7 +94,10 @@ describe('Unprotected routes: ', function() {
               });
             };
 
-            expect(user.password).to.equal('Phillip'); // TODO change when encrypted
+            comparePassword(user.password, 'Phillip', function(isMatch) {
+              expect(isMatch).to.be.true;
+            });
+
           });
         done();
       });
