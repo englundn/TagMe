@@ -236,8 +236,10 @@ export default class Memory extends React.Component {
             }
           }>
           <Image style={styles.image} resizeMode={Image.resizeMode.contain} source={{uri: this.state.image.uri}}/>
-            <Text onPress={this.openEditCaption.bind(this)} style={styles.caption}>{this.state.caption}</Text>
-            <Ionicons name="ios-edit" size={40} color="#444" />
+            <View style={styles.captionContainer}>
+              <Text style={styles.caption}>{this.state.caption}</Text>
+              <Ionicons onPress={this.openEditCaption.bind(this)} name="ios-color-wand-outline" size={35} color="#444" />
+            </View>
               <Modal
                 animationType={'slide'}
                 transparent={true}
@@ -368,6 +370,12 @@ const styles = StyleSheet.create({
     ...Font.style('montserrat'),
     fontSize: 16,
     textAlign: 'center',
+  },
+
+  captionContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 
   buttonsContainer: {
