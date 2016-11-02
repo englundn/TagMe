@@ -1,7 +1,7 @@
 {
-  "name": "invalid-memories-greenfield",
+  "name": "tag-me-legacy",
   "version": "1.0.0",
-  "description": "Greenfield project by Invalid Memories Team",
+  "description": "Legacy project by Indecipherable Suggestions Team",
   "main": "index.js",
   "scripts": {
     "start": "grunt upload",
@@ -10,15 +10,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hr-memories/greenfield.git"
+    "url": "git+https://github.com/IndecipherableSuggestions/TagMeLegacy.git"
   },
-  "author": "Bill Zito, Bobby Wei, Karina Kinaman, Kyle Chun",
+  "author": "Andrew Lee, Charlotte Willens, Nick Englund, Steve Zhou",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/hr-memories/greenfield/issues"
+    "url": "https://github.com/IndecipherableSuggestions/TagMeLegacy/issues"
   },
-  "homepage": "https://github.com/hr-memories/greenfield#readme",
+  "homepage": "https://github.com/IndecipherableSuggestions/TagMeLegacy#readme",
   "dependencies": {
+    "bcrypt": "^0.8.7",
     "body-parser": "^1.15.2",
     "chai": "^3.5.0",
     "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor",
