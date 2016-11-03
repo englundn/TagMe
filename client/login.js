@@ -180,6 +180,8 @@ export default class Login extends React.Component {
                     <Input
                       placeholder='USERNAME'
                       placeholderTextColor='#444'
+                      autoCapitalize='none'
+                      autoCorrect='false'
                       onChangeText={(text) => this.setState({username: text})}
                       value={this.state.username}
                       style={styles.formText}
@@ -191,6 +193,8 @@ export default class Login extends React.Component {
                     <Input
                       placeholder='PASSWORD'
                       placeholderTextColor='#444'
+                      autoCapitalize='none'
+                      autoCorrect='false'
                       secureTextEntry={true}
                       onChangeText={(text) => this.setState({password: text})}
                       value={this.state.password}
@@ -213,7 +217,7 @@ export default class Login extends React.Component {
             <View style={styles.buttonsContainer}>
               <Button primary style={styles.button} onPress={this.login.bind(this)}>
                 <Text style={styles.buttonText}>
-                  Login <Ionicons name="ios-log-in" size={23} color="white" />
+                  Login <Ionicons name="ios-log-in" size={25} color="white" />
                 </Text>
               </Button>
 
