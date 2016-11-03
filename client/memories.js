@@ -32,7 +32,8 @@ export default class Memories extends React.Component {
       searchTerm: '',
       searchQuery: [],
       searching: false,
-      dataSource: []
+      dataSource: [],
+      page: 0
     };
   }
 
@@ -121,13 +122,11 @@ export default class Memories extends React.Component {
 
   async search() {
     var query = this.state.searchQuery;
-    if (this.state.searchTerm === '') {
-      return;
+    if (this.state.searchTerm !== '') {
+      query.push(this.state.searchTerm);
+      this.setState({searchQuery: query});
     }
     
-    query.push(this.state.searchTerm);
-    this.setState({searchQuery: query});
-
     var context = this;
     try {
       var token =  await AsyncStorage.getItem(STORAGE_KEY);
@@ -158,14 +157,28 @@ export default class Memories extends React.Component {
     })
   }
 
+  async searchOnTabPage(tag) {
+    this.setState({
+      page: 0,
+      searchTerm: tag
+    }, function() {
+      this.search();
+    })
+  }
+
   async removeAndPartialSearch(index) {
-    
+    var context = this;
     this.state.searchQuery.splice(index,1);
     if (this.state.searchQuery.length === 0) {
       this.setState({searching: false});
+      this.fetchMemories();
+    } else {
+      this.setState({searchQuery: this.state.searchQuery}, function() {
+        context.search();
+      });
     }
-    this.setState({searchQuery: this.state.searchQuery});
-    this.fetchMemories();
+
+    
   }
 
   async cancelSearch() {
@@ -187,7 +200,7 @@ export default class Memories extends React.Component {
     });
 
     var tagsNode = this.state.dataSource.map(function(tag, i) {
-      return (<Button key={i} style={styles.tag} rounded info>
+      return (<Button onPress={context.searchOnTabPage.bind(context, tag.name)} key={i} style={styles.tag} rounded info>
                 <Text key={i} style={styles.tagText}>{tag.name} 
                   <Text style={styles.tagCounterText}> {tag.count}</Text>
                 </Text>
@@ -214,6 +227,7 @@ export default class Memories extends React.Component {
           style={{marginTop: 0, }}
           initialPage={0}
           tabBarPosition='top'
+          page={this.state.page}
           renderTabBar={() => <ScrollableTabBar activeTextColor="#25a2c3" underlineStyle={{ backgroundColor:"#25a2c3"}}/>} >
 
           <View tabLabel='Photos'>
