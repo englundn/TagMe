@@ -239,8 +239,12 @@ export default class Memories extends React.Component {
             }}>
             <View style={{flexDirection: 'row', margin: 10}}>
               <InputGroup borderType='rounded' style={{width: 250}}>
-                  <Input 
-                    placeholder='Search'
+                  <Input
+                    autoCapitalize='none'
+                    autoCorrect='false'
+                    clearButtonMode='while-editing'
+                    returnKeyType='done'
+                    placeholder='Search by tag'
                     onChangeText={(text) => this.setState({searchTerm: text})}
                     value={this.state.searchTerm}
                   />
