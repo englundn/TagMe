@@ -14,7 +14,7 @@ import { Font } from 'exponent';
 import { Container, Header, Title, Content, Footer, InputGroup, Input, Button } from 'native-base';
 import { Ionicons } from '@exponent/vector-icons';
 import ScrollableTabView, { ScrollableTabBar, } from 'react-native-scrollable-tab-view';
-// import ScrollableTabView, { DefaultTabBar, } from 'react-native-scrollable-tab-view';
+
 import config from './config';
 
 var STORAGE_KEY = 'id_token';
@@ -193,7 +193,7 @@ export default class Memories extends React.Component {
       return (
         <Button key={index} onPress={context.removeAndPartialSearch.bind(context,index)} style={styles.tag} rounded info>
           <Text key={index} style={styles.tagText}>
-          {term}  <Ionicons name="ios-close" size={25} color="#444" />
+           {term}  <Ionicons name="ios-close" size={16} color="#fff" />
           </Text>
         </Button>
       )
@@ -239,8 +239,12 @@ export default class Memories extends React.Component {
             }}>
             <View style={{flexDirection: 'row', margin: 10}}>
               <InputGroup borderType='rounded' style={{width: 250}}>
-                  <Input 
-                    placeholder='Search'
+                  <Input
+                    autoCapitalize='none'
+                    autoCorrect='false'
+                    clearButtonMode='while-editing'
+                    returnKeyType='done'
+                    placeholder='Search by tag'
                     onChangeText={(text) => this.setState({searchTerm: text})}
                     value={this.state.searchTerm}
                   />
@@ -314,15 +318,16 @@ const styles = StyleSheet.create({
 
   tagCounterText: {
     ...Font.style('helvetica'),
-    fontSize: 20,
+    fontSize: 16,
     letterSpacing: 1,
-    color: '#fff'
+    color: '#444'
   },
 
   tagText: {
-    ...Font.style('pacifico'),
+    ...Font.style('helvetica'),
     fontSize: 16,
-    letterSpacing: 1
+    letterSpacing: 1,
+    color: '#fff'
   },
 
   tagsContainer: {

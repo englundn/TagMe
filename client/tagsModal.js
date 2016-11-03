@@ -125,7 +125,7 @@ export default class ModalView extends React.Component {
                 onChangeText={(text) => this.setState({customTag: text})}
                 multiline={true}
                 value={this.state.customTag}
-                style={{height: 40, width: 120, margin: 20, borderColor: 'grey', borderRightWidth: 0, borderLeftWidth: 0, borderBottomWidth: 1, textAlign: 'center'}}
+                style={styles.customTagInput}
               />
               <Button primary onPress={this.addCustomTag.bind(this)} style={styles.button}>
                 <Text style={styles.buttonText}> + </Text>
@@ -234,6 +234,19 @@ const styles = StyleSheet.create({
     ...Font.style('montserrat'),
     color: '#fff',
     fontSize: 18
+  },
+
+  customTagInput: {
+    ...Font.style('montserrat'),
+    fontSize: 16,
+    height: 40, 
+    width: 120, 
+    margin: 20, 
+    borderColor: 'grey', 
+    borderRightWidth: 0, 
+    borderLeftWidth: 0, 
+    borderBottomWidth: 1, 
+    textAlign: 'center'
   },
 
   tag: {
