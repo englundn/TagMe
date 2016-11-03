@@ -294,7 +294,11 @@ export default class Memory extends React.Component {
               visible={this.state.captionModalVisible}
               onRequestClose={() => { alert('Modal has been closed.'); }}
             >
-              <CaptionEditor saveCaption={this.saveCaption.bind(this)} cancelEdit={this.closeEditCaption.bind(this)} captions={this.state.caption} />
+              <CaptionEditor
+                caption={this.state.caption}
+                saveCaption={this.saveCaption.bind(this)}
+                cancelEdit={this.closeEditCaption.bind(this)}
+                captions={this.state.caption} />
             </Modal>
           <MemoryDetails 
             status={this.state.status} 
@@ -346,7 +350,7 @@ class CaptionEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      caption: ''
+      caption: this.props.caption
     };
   }
 
@@ -359,6 +363,7 @@ class CaptionEditor extends React.Component {
       <ScrollView contentContainerStyle={styles.modal}>
           <Text style={styles.caption}>Type Here to edit caption</Text>
           <TextInput
+            defaultValue={this.props.caption}
             placeholderTextColor='#444'
             onChangeText={(text) => this.setState({caption: text})}
             multiline={true}
