@@ -122,7 +122,7 @@ export default class Memory extends React.Component {
   }
 
   async deleteMemory(id, pings) {
-    console.log(id);
+
     var context = this;
     console.log(context.props.navigator.length);
 
