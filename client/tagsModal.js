@@ -19,7 +19,7 @@ export default class ModalView extends React.Component {
       modalVisible: false,
       filteredTags: [],
       customTag: '',
-      modalTags: props.tags
+      modalTags: props.tags.sort()
     };
   }
 
@@ -51,6 +51,7 @@ export default class ModalView extends React.Component {
   addCustomTag() {
     var allTags = this.state.modalTags;
     allTags.push(this.state.customTag.toLowerCase());
+    allTags.sort();
     this.setState({
       modalTags: allTags
     });
