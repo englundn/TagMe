@@ -22,6 +22,7 @@ export default class Memory extends React.Component {
     super(props);
     this.state = {
       image: this.props.image,
+      location: this.props.location,
       tags: [],
       filteredTags: [],
       status: false,
@@ -31,7 +32,7 @@ export default class Memory extends React.Component {
     };
   }
 
-   _navigate(page, tag) {
+  _navigate(page, tag) {
     this.props.navigator.push({
       name: page ? page : 'Homescreen',
       passProps: {
