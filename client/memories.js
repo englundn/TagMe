@@ -43,7 +43,15 @@ export default class Memories extends React.Component {
 
     });
     this.setState({ fontLoaded: true });
-    this.fetchMemories();
+
+    if (this.props.tag !== null && this.props.prevScene === 'Memory') {
+      this.setState({
+        searchTerm: this.props.tag
+      })
+      this.search();
+    } else {
+      this.fetchMemories();
+    }
   }
 
   _navigate(image) {
@@ -211,7 +219,7 @@ export default class Memories extends React.Component {
           <View tabLabel='Photos'>
             <Content contentContainerStyle={{
               flexWrap: 'wrap',
-              flexDirection: 'row',
+              flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center'
             }}>
@@ -235,13 +243,11 @@ export default class Memories extends React.Component {
                 ) : null
               }
             </View>
-            <View style={{flexDirection:'column'}}>
-              <View>
-                <View style={styles.tagsContainer}>
-                  {searchQueueNode}
-                </View>
-              </View>
-              <View style={{flexDirection: 'row'}}>
+            <View style={styles.tagsContainer}>
+              {searchQueueNode}
+            </View> 
+            <View style={{flexDirection: 'row', margin: 3}}> 
+            <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap', alignItems: 'flex-start'}}>
                 {
                   this.state.searching ? (
                     this.state.queryList.map((image, i) => 
@@ -257,14 +263,14 @@ export default class Memories extends React.Component {
                     </TouchableHighlight>
                   )
                 }
-              </View>
             </View>
+            </View> 
             </Content>
           </View>
 
           <ScrollView tabLabel='Tags'>
             <View style={styles.tagsContainer}>
-            {tagsNode}
+              {tagsNode}
             </View>
           </ScrollView>
 
@@ -306,11 +312,13 @@ const styles = StyleSheet.create({
   },
 
   tagsContainer: {
+    marginTop: 30,
+    marginBottom: 10,
     flexWrap: 'wrap',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 10,
-  }
+    flex: 1
+  },
 
 });
