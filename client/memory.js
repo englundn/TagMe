@@ -28,7 +28,8 @@ export default class Memory extends React.Component {
       status: false,
       databaseId: '',
       caption: '',
-      captionModalVisible: false
+      captionModalVisible: false,
+      tester: ''
     };
   }
 
@@ -218,6 +219,7 @@ export default class Memory extends React.Component {
     });
   }
 
+
   async updateTags(filteredTags) {
     if (filteredTags.length === 0) {
       return;
@@ -263,6 +265,7 @@ export default class Memory extends React.Component {
         previousTags={this.state.filteredTags}
         updateTags={this.updateTags.bind(this)}
         status={this.state.status}
+        location={this.state.location}
       />
       : null;
     return (

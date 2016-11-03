@@ -19,7 +19,7 @@ export default class Homescreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      fontLoaded: false
+      fontLoaded: false,
     }
   }
 
@@ -40,14 +40,15 @@ export default class Homescreen extends React.Component {
     }
   }
 
-  _navigate(sceneName, imageUri, coordinates) {
+  _navigate(sceneName, imageUri, coordinates, googleResponse) {
     this.props.navigator.push({
       name: sceneName,
       passProps: {
         'image': {uri: imageUri},
         'location': coordinates,
         'username': this.props.username,
-        'prevScene': 'Homescreen'
+        'prevScene': 'Homescreen',
+        'locationDescrip': googleResponse
       }
     });
   }
@@ -82,7 +83,24 @@ export default class Homescreen extends React.Component {
     });
   }
 
+  getLocationName(location) {
+    var context = this;
+    var lat = location.latitude;
+    var long = location.longitude;
+    var googleApiKey = 'AIzaSyCPBzWzMZuqgV4Pw0Npb-QgXjKgmGgh1xc';
+    fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + long + '&key=' + googleApiKey,  {
+      method: 'GET'
+    }).then(function(res) {
+      context.setState({
+        locationDescrip: res
+      });
+    }).catch(function(err) {
+      console.log('ERROR', err);
+    });
+  };
+
   getImage() {
+    var context = this;
     var oneImage = async function(){
       return Exponent.ImagePicker.launchImageLibraryAsync({});
     };
@@ -91,7 +109,20 @@ export default class Homescreen extends React.Component {
         navigator.geolocation.getCurrentPosition(
           (position) => {
             var geoloc = {latitude: position.coords.latitude, longitude: position.coords.longitude};
-            this._navigate('Memory', image.uri, geoloc);
+            var googleApiKey = 'AIzaSyCPBzWzMZuqgV4Pw0Npb-QgXjKgmGgh1xc';
+            fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + geoloc.latitude + ',' + geoloc.longitude + '&key=' + googleApiKey,  {
+              method: 'GET'
+            }).then(function(res) {
+              var locationTags = [];
+              var address = JSON.parse(res['_bodyInit']).results[0].address_components;
+              for (var i = 0; i < address.length; i++) {
+                if (address[i].types.includes('neighborhood') || address[i].types.includes('locality')) {
+                  locationTags.push(address[i].long_name);
+                }
+              }
+              console.log('will this console log work???', locationTags);
+              context._navigate('Memory', image.uri, geoloc, locationTags);
+            });
           },
           (error) => alert(JSON.stringify(error)),
           {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
