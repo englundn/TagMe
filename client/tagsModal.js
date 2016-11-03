@@ -53,7 +53,8 @@ export default class ModalView extends React.Component {
     allTags.push(this.state.customTag.toLowerCase());
     allTags.sort();
     this.setState({
-      modalTags: allTags
+      modalTags: allTags,
+      customTag: ''
     });
   }
 
@@ -112,6 +113,7 @@ export default class ModalView extends React.Component {
                 placeholderTextColor='#444'
                 onChangeText={(text) => this.setState({customTag: text})}
                 multiline={true}
+                value={this.state.customTag}
                 style={{height: 40, width: 120, margin: 20, borderColor: 'grey', borderRightWidth: 0, borderLeftWidth: 0, borderBottomWidth: 1, textAlign: 'center'}}
               />
               <Button primary onPress={this.addCustomTag.bind(this)} style={styles.button}>
