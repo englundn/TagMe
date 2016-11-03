@@ -362,7 +362,7 @@ class CaptionEditor extends React.Component {
             placeholderTextColor='#444'
             onChangeText={(text) => this.setState({caption: text})}
             multiline={true}
-            style={{height: 40, margin: 20, borderColor: 'grey', borderRightWidth: 0, borderLeftWidth: 0, borderBottomWidth: 1, textAlign: 'center'}}
+            style={styles.captionInput}
           />
           <View style={styles.buttonsContainer}>
             <Button primary style={styles.button} onPress={this.saveCaption.bind(this)}>
@@ -422,8 +422,14 @@ const styles = StyleSheet.create({
 
   captionInput: {
     ...Font.style('montserrat'),
-    fontSize: 16,
     textAlign: 'center',
+    fontSize: 16,
+    height: 40, 
+    margin: 20, 
+    borderColor: 'grey', 
+    borderRightWidth: 0, 
+    borderLeftWidth: 0, 
+    borderBottomWidth: 1, 
   },
 
   captionContainer: {
