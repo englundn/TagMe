@@ -166,10 +166,6 @@ export default class Memories extends React.Component {
     this.fetchMemories();
   }
 
-  async fixScrolling(contentWidth, contentHeight) {
-    console.log(contentWidth, contentHeight);
-  }
-
   render() {
     var context = this;
     var searchQueueNode = this.state.searchQuery.map(function(term, index) {
