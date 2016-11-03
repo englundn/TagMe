@@ -31,7 +31,8 @@ export default class Memories extends React.Component {
       fontLoaded: false,
       searchTerm: '',
       searchQuery: [],
-      searching: false
+      searching: false,
+      dataSource: []
     };
   }
 
@@ -93,20 +94,20 @@ export default class Memories extends React.Component {
         };
       });
       context.setState({imageList: images});
-      console.log(images);
-      var allTags = memoryArray.map(memory => {
-        return memory.tags;
-      }).reduce((a, b) => {return a.concat(b)}, []);
-
       var tagsCount = {};
-      allTags.forEach(a => { tagsCount[a] = (tagsCount[a] || 0) + 1; });
+      memoryArray.map(memory => { return memory.tags; }) // get only tags
+      .reduce((a, b) => { return a.concat(b)}, []) // flatten array
+      .forEach(tag => { tagsCount[tag] = (tagsCount[tag] || 0) + 1; }); // create object with tag counts
 
-      var newres = [];
-      for (var key in tagsCount) {
-        newres.push({'name': key, 'count': tagsCount[key] + ''});
+      var dataSource = [];
+      for (var key in tagsCount) { // convert to different format {name: 'person', count: '3'}
+        dataSource.push({'name': key, 'count': tagsCount[key] + ''});
       }
-      console.log(newres);
-      context.setState({tagsCount: ds.cloneWithRows(newres)});
+      dataSource = dataSource.sort(function(a, b) { // sort tags by count
+        return b.count - a.count;
+      })
+      // console.log(dataSource);
+      context.setState({dataSource: dataSource});
     });
   }
 
@@ -165,13 +166,6 @@ export default class Memories extends React.Component {
     this.fetchMemories();
   }
 
-  _renderRow(rowData) {
-    return (<View style={{height:70,borderBottomColor: '#ededed', borderBottomWidth:1, paddingLeft:10, paddingTop:10}}>
-              <Text style={{fontSize:22}}>{rowData.name}</Text>
-              <Text style={{color: '#666'}}>{rowData.count}</Text>
-            </View> )
-  }
-
   render() {
     var context = this;
     var searchQueueNode = this.state.searchQuery.map(function(term, index) {
@@ -181,11 +175,19 @@ export default class Memories extends React.Component {
           {term}  <Ionicons name="ios-close" size={25} color="#444" />
           </Text>
         </Button>
-      )           
-    })
+      )
+    });
+
+    var tagsNode = this.state.dataSource.map(function(tag, i) {
+      return (<Button key={i} style={styles.tag} rounded info>
+                <Text key={i} style={styles.tagText}>{tag.name} 
+                  <Text style={styles.tagCounterText}> {tag.count}</Text>
+                </Text>
+              </Button>)
+    });
 
     return (
-      <View>
+      <View style={{flex: 1}}>
         {
           this.state.fontLoaded ? (
             <Header>
@@ -206,7 +208,7 @@ export default class Memories extends React.Component {
           tabBarPosition='top'
           renderTabBar={() => <ScrollableTabBar activeTextColor="#25a2c3" underlineStyle={{ backgroundColor:"#25a2c3"}}/>} >
 
-          <ScrollView tabLabel='Photos'>
+          <View tabLabel='Photos'>
             <Content contentContainerStyle={{
               flexWrap: 'wrap',
               flexDirection: 'row',
@@ -258,10 +260,12 @@ export default class Memories extends React.Component {
               </View>
             </View>
             </Content>
-          </ScrollView>
+          </View>
 
           <ScrollView tabLabel='Tags'>
-            <ListView dataSource={this.state.tagsCount} renderRow={this._renderRow}></ListView>
+            <View style={styles.tagsContainer}>
+            {tagsNode}
+            </View>
           </ScrollView>
 
         </ScrollableTabView>
@@ -288,6 +292,13 @@ const styles = StyleSheet.create({
     margin: 10
   },
 
+  tagCounterText: {
+    ...Font.style('helvetica'),
+    fontSize: 20,
+    letterSpacing: 1,
+    color: '#fff'
+  },
+
   tagText: {
     ...Font.style('pacifico'),
     fontSize: 16,
@@ -303,28 +314,3 @@ const styles = StyleSheet.create({
   }
 
 });
-
-/*
-
-<Header searchBar rounded>
-           <InputGroup>
-               <Ionicons name='ios-search' />
-               <Input placeholder='Search' />
-               <Ionicons name='ios-people' />
-           </InputGroup>
-           <Button transparent>
-               Search
-           </Button>
-       </Header>
-
-
-<Header>
-          <Button transparent onPress={() => this.props.navigator.pop()}>
-            <Ionicons name="ios-arrow-back" size={32} style={{color: '#25a2c3', marginTop: 5}}/>
-          </Button>
-          <Title style={styles.headerText}>{this.props.username}'s Memories</Title>
-          <Button transparent onPress={this._navigateHome.bind(this)}>
-            <Ionicons name="ios-home" size={35} color="#444" />
-          </Button>
-        </Header>
-        */
