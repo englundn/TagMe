@@ -199,7 +199,7 @@ export default class Login extends React.Component {
                   </InputGroup>
                 </ListItem>
                 <ListItem>
-                  <Text style={styles.sFormText}>Remember Deivce</Text>
+                  <Text style={styles.sFormText}>Remember Device</Text>
                   <Switch
                     onValueChange={(value) => this.setState({rememberSwitchBool: value})}
                     style={{marginLeft: 10}}

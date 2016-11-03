@@ -253,6 +253,7 @@ export default class Memory extends React.Component {
   render() {
     var loading = this.state.status ? 
       <ModalView 
+        deleteMemory={this.deleteMemory.bind(this)}
         prevScene={this.props.prevScene} 
         tags={this.state.tags} 
         previousTags={this.state.filteredTags}
@@ -281,10 +282,7 @@ export default class Memory extends React.Component {
           <Image style={styles.image} resizeMode={Image.resizeMode.contain} source={{uri: this.state.image.uri}}/>
             <View style={styles.captionContainer}>
               <Text style={styles.caption}>{this.state.caption}</Text>
-              <Ionicons onPress={this.openEditCaption.bind(this)} name="md-create" size={35} color="#444" />
-              <Button onPress={() => this.deleteMemory(this.state.databaseId, 0)}>
-                <Text>{'Delete'}</Text>
-              </Button>
+              <Ionicons onPress={this.openEditCaption.bind(this)} name="md-create" size={35} color="#444" /> 
             </View>
               <Modal
                 animationType={'slide'}
