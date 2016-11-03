@@ -122,8 +122,9 @@ export default class Memory extends React.Component {
 
   async deleteMemory(id, pings) {
     console.log(id);
-
     var context = this;
+    console.log(context.props.navigator.length);
+
     try {
       var token =  await AsyncStorage.getItem(STORAGE_KEY);
     } catch (error) {
@@ -137,9 +138,10 @@ export default class Memory extends React.Component {
       }
     }).then(function(res) {
       console.log(res.status);
-      console.log('Memory deleted');
-      // this._navigate('Memories')
-      context.props.navigator.pop();
+      if (res.status === '200') {
+        console.log('Memory deleted');
+      }
+      context._navigate();
     }).catch(function(err) {
       console.log('ERROR', err);
       // Try pinging database again
@@ -149,7 +151,6 @@ export default class Memory extends React.Component {
         console.log('token timed out');
       }
     });
-
   }
 
   async getMemoryData(id, pings) {
