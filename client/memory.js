@@ -253,7 +253,8 @@ export default class Memory extends React.Component {
 
   render() {
     var loading = this.state.status ? 
-      <ModalView 
+      <ModalView
+        databaseId={this.state.databaseId}
         deleteMemory={this.deleteMemory.bind(this)}
         prevScene={this.props.prevScene} 
         tags={this.state.tags} 

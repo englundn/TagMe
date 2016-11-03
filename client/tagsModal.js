@@ -80,7 +80,7 @@ export default class ModalView extends React.Component {
         <Button onPress={this.setModalVisible.bind(this, true)} style={styles.button}>
           <Text style={styles.buttonText}>Edit Tags</Text>
         </Button>
-        <Button onPress={() => this.props.deleteMemory(this.state.databaseId, 0)} style={styles.button}>
+        <Button onPress={() => this.props.deleteMemory(this.props.databaseId, 0)} style={styles.button}>
           <Text style={styles.buttonText}>Delete</Text>
         </Button>
         <Modal
