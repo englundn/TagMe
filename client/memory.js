@@ -119,6 +119,38 @@ export default class Memory extends React.Component {
       });
   }
 
+  async deleteMemory(id, pings) {
+    console.log(id);
+
+    var context = this;
+    try {
+      var token =  await AsyncStorage.getItem(STORAGE_KEY);
+    } catch (error) {
+      console.log('AsyncStorage error: ' + error.message);
+    }
+
+    fetch(config.domain + '/api/memories/id/' + id, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
+    }).then(function(res) {
+      console.log(res.status);
+      console.log('Memory deleted');
+      // this._navigate('Memories')
+      context.props.navigator.pop();
+    }).catch(function(err) {
+      console.log('ERROR', err);
+      // Try pinging database again
+      if (pings < 200) {
+        context.deleteMemory(id, pings + 1);
+      } else {
+        console.log('token timed out');
+      }
+    });
+
+  }
+
   async getMemoryData(id, pings) {
     var context = this;
     try {
@@ -221,6 +253,7 @@ export default class Memory extends React.Component {
   render() {
     var loading = this.state.status ? 
       <ModalView 
+        deleteMemory={this.deleteMemory.bind(this)}
         prevScene={this.props.prevScene} 
         tags={this.state.tags} 
         previousTags={this.state.filteredTags}
@@ -249,7 +282,7 @@ export default class Memory extends React.Component {
           <Image style={styles.image} resizeMode={Image.resizeMode.contain} source={{uri: this.state.image.uri}}/>
             <View style={styles.captionContainer}>
               <Text style={styles.caption}>{this.state.caption}</Text>
-              <Ionicons onPress={this.openEditCaption.bind(this)} name="md-create" size={35} color="#444" />
+              <Ionicons onPress={this.openEditCaption.bind(this)} name="md-create" size={35} color="#444" /> 
             </View>
               <Modal
                 animationType={'slide'}

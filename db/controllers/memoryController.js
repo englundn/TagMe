@@ -141,7 +141,7 @@ exports.storeTags = function(req, res) {
         }
         
         res.sendStatus(201);
-      })
+      });
       //memory.analyses[2].tags[0] = req.body.caption;
 
     } else {
@@ -210,5 +210,15 @@ exports.searchMemories = function(req, res) {
   .catch(function(err) {
     console.log('err getting memories', err);
     res.status(404).send('error searching the databse');
+  });
+};
+
+exports.deleteMemory = function(req, res) {
+  console.log('deleteMemory in memoryController');
+  Memory.findOne({ _id: req.params.id }).then(function(memory) {
+    memory.remove();
+    res.status(200).send(memory);
+  }).catch(function(err) {
+    res.status(404).send();
   });
 };
