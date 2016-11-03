@@ -10,6 +10,7 @@ import {
 import { Font } from 'exponent';
 import { Container, Content, Button } from 'native-base';
 import { Ionicons } from '@exponent/vector-icons';
+//trying to get things to highlight automatically when you add them
 
 export default class ModalView extends React.Component {
 
@@ -19,7 +20,8 @@ export default class ModalView extends React.Component {
       modalVisible: false,
       filteredTags: [],
       customTag: '',
-      modalTags: props.tags.sort()
+      modalTags: props.tags.sort(),
+      previousTags: props.previousTags
     };
   }
 
@@ -49,10 +51,16 @@ export default class ModalView extends React.Component {
   }
 
   addCustomTag() {
+    var name = this.state.customTag.toLowerCase();
+    //add to all tags
     var allTags = this.state.modalTags;
-    allTags.push(this.state.customTag.toLowerCase());
-    allTags.sort();
+    allTags.push(name);
+    //add to previous tags (selects)
+    var prevTags = this.state.previousTags;
+    prevTags.push(name);
+    console.log('prev tags', prevTags, 'all tags', allTags);
     this.setState({
+      previousTags: prevTags,
       modalTags: allTags,
       customTag: ''
     });
@@ -104,7 +112,7 @@ export default class ModalView extends React.Component {
                       name={tag}
                       addTag={this.addTag.bind(this)}
                       removeTag={this.removeTag.bind(this)}
-                      selected={this.props.previousTags.includes(tag)}
+                      selected={this.state.previousTags.includes(tag)}
                     />
                   )
                 })
