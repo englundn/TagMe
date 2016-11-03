@@ -39,8 +39,7 @@ export default class Memory extends React.Component {
       name: page ? page : 'Homescreen',
       passProps: {
         'username': this.props.username,
-        'tag': tag ? tag : null,
-        'prevScene': 'Memory'
+        'tag': tag ? tag : null
       }
     });
   }
