@@ -174,7 +174,7 @@ exports.searchMemories = function(req, res) {
   console.log(req.body);
   searchTerm.forEach(function(term) {
     term = term.toLowerCase().replace('_', ' ');
-  })
+  });
 
   User.findOne({username: req.user.username}).populate('memories').then(function(user) {
     console.log('user', user);
@@ -186,7 +186,7 @@ exports.searchMemories = function(req, res) {
           if (_.includes(tag, term)) {
             found = true;
           }
-        })
+        });
       });
       return found; 
     });
