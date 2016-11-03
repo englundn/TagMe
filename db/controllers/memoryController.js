@@ -214,6 +214,11 @@ exports.searchMemories = function(req, res) {
 };
 
 exports.deleteMemory = function(req, res) {
-  console.log('deleteMemory');
-  res.send();
+  console.log('deleteMemory in memoryController');
+  Memory.findOne({ _id: req.params.id }).then(function(memory) {
+    memory.remove();
+    res.status(200).send(memory);
+  }).catch(function(err) {
+    res.status(404).send();
+  });
 };

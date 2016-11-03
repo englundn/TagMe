@@ -119,8 +119,36 @@ export default class Memory extends React.Component {
       });
   }
 
-  async deleteMemory() {
-    console.log('delete in memory.js');
+  async deleteMemory(id, pings) {
+    console.log(id);
+
+    var context = this;
+    try {
+      var token =  await AsyncStorage.getItem(STORAGE_KEY);
+    } catch (error) {
+      console.log('AsyncStorage error: ' + error.message);
+    }
+
+    fetch(config.domain + '/api/memories/id/' + id, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
+    }).then(function(res) {
+      console.log(res.status);
+      console.log('Memory deleted');
+      // this._navigate('Memories')
+      context.props.navigator.pop();
+    }).catch(function(err) {
+      console.log('ERROR', err);
+      // Try pinging database again
+      if (pings < 200) {
+        context.deleteMemory(id, pings + 1);
+      } else {
+        console.log('token timed out');
+      }
+    });
+
   }
 
   async getMemoryData(id, pings) {
@@ -254,6 +282,9 @@ export default class Memory extends React.Component {
             <View style={styles.captionContainer}>
               <Text style={styles.caption}>{this.state.caption}</Text>
               <Ionicons onPress={this.openEditCaption.bind(this)} name="md-create" size={35} color="#444" />
+              <Button onPress={() => this.deleteMemory(this.state.databaseId, 0)}>
+                <Text>{'Delete'}</Text>
+              </Button>
             </View>
               <Modal
                 animationType={'slide'}
