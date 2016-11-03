@@ -241,7 +241,7 @@ export default class Memories extends React.Component {
               <InputGroup borderType='rounded' style={{width: 250}}>
                   <Input 
                     placeholder='Search'
-                    onChangeText={(text) => this.setState({searchTerm: text.toLowerCase()})}
+                    onChangeText={(text) => this.setState({searchTerm: text})}
                     value={this.state.searchTerm}
                   />
               </InputGroup>
