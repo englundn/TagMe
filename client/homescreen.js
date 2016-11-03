@@ -40,11 +40,12 @@ export default class Homescreen extends React.Component {
     }
   }
 
-  _navigate(sceneName, imageUri) {
+  _navigate(sceneName, imageUri, coordinates) {
     this.props.navigator.push({
       name: sceneName,
       passProps: {
         'image': {uri: imageUri},
+        'location': coordinates,
         'username': this.props.username,
         'prevScene': 'Homescreen'
       }
@@ -87,7 +88,15 @@ export default class Homescreen extends React.Component {
     };
     oneImage().then((image)=> {
       if (!image.cancelled) {
-        this._navigate('Memory', image.uri);
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            var geoloc = {latitude: position.coords.latitude, longitude: position.coords.longitude};
+            this._navigate('Memory', image.uri, geoloc);
+          },
+          (error) => alert(JSON.stringify(error)),
+          {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+        );
+        // this._navigate('Memory', image.uri);
       }
     });
   }
@@ -96,9 +105,17 @@ export default class Homescreen extends React.Component {
     var newImage = async function() {
       return Exponent.ImagePicker.launchCameraAsync({});
     };
+    // console.log('LOCATION IS ', Exponent.Location.getCurrentPositionAsync());
     newImage().then((image) => {
       if (!image.cancelled) {
-        this._navigate('Memory', image.uri);
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            var geoloc = {latitude: position.coords.latitude, longitude: position.coords.longitude};
+            this._navigate('Memory', image.uri, geoloc);
+          },
+          (error) => alert(JSON.stringify(error)),
+          {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+        );
       }
     });
   }
