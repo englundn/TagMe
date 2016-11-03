@@ -38,6 +38,10 @@ router.route('/id/:id').get(memoryController.fetchOne);
 
 router.route('/id/:id').post(jsonParser, memoryController.storeTags);
 
+//User deletes a specific memory
+router.route('/id/:id').delete(memoryController.deleteMemory);
+
+
 //User searches for a specific tag
 router.route('/search').post(memoryController.searchMemories);
 
