@@ -8,8 +8,8 @@ var path = require('path');
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    //cb(null, path.join(__dirname, '../../uploads/'));
-    cb(null, 'uploads/');
+    cb(null, path.join(__dirname, '../../uploads/'));
+    //cb(null, 'uploads/');
   },
   filename: function (req, file, cb) {
     // console.log('the original file name is', file);
@@ -39,6 +39,8 @@ router.route('/all').get(memoryController.fetchMemories);
 router.route('/id/:id').get(memoryController.fetchOne);
 
 router.route('/id/:id').post(jsonParser, memoryController.storeTags);
+
+router.route('/id/update/:id').post(jsonParser, memoryController.update);
 
 //User deletes a specific memory
 router.route('/id/:id').delete(memoryController.deleteMemory);
