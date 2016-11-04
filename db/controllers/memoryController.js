@@ -259,10 +259,10 @@ exports.deleteMemory = function(req, res) {
     console.log('before deleting');
 
     var s3 = new AWS.S3({
-      accessKeyId: 'AKIAJVZ2BG74ZJV4E7CQ' /* pull from Meteor.settings */, 
-      secretAccessKey: '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'/* pull from Meteor.settings */
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID /* pull from Meteor.settings */, 
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY/* pull from Meteor.settings */
     });
-    
+
     s3.deleteObjects(params,
       function(err, data) {
         console.log('in delete callback');
