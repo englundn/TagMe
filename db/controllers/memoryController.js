@@ -32,7 +32,10 @@ exports.upload = function(req, res) {
             title: req.file.filename,
             filePath: image.url, 
             createdAt: Date.now(),
-            keyArray: keyArray
+            keyArray: keyArray,
+            longitude: req.body.longitude,
+            latitude: req.body.latitude,
+            locationDesc: req.body.locationDescrip
           }).then(function(memory) {
 
             fs.unlink('uploads/' + req.file.filename, function(err, success) {
