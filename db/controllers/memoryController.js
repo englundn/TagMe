@@ -17,7 +17,7 @@ exports.upload = function(req, res) {
     console.log('Multer failed to save file');
     res.status(404).send();
   } else {
-    awsClient.upload('uploads/' + req.file.filename, {}, function(err, versions, meta) {
+    awsClient.upload('uploads/' + req.file.filename), {}, function(err, versions, meta) {
       if (err) { 
         console.log('s3 upload error: ', err); 
       }
