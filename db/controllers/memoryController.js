@@ -17,7 +17,7 @@ exports.upload = function(req, res) {
     console.log('Multer failed to save file');
     res.status(404).send();
   } else {
-    awsClient.upload('uploads/' + req.file.filename, {}, function(err, versions, meta) {
+    awsClient.upload('uploads/' + req.file.filename), {}, function(err, versions, meta) {
       if (err) { 
         console.log('s3 upload error: ', err); 
       }
@@ -138,6 +138,7 @@ exports.update = function(req, res) {
   //   memory.longitude = req.body.longitude;
   //   memory.locationDesc = req.body.locationDesc;
     Memory.update({ _id: req.params.id }, { $set: { latitude: req.body.latitude, longitude: req.body.longitude, locationDescrip: req.body.locationDescrip}}, function(err) {
+
         if (err) {
           console.log('Error saving tags:', err);
           res.sendStatus(404);
