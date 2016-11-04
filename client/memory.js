@@ -131,9 +131,9 @@ export default class Memory extends React.Component {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            latitude: this.state.location.latitude,
-            longitude: this.state.location.longitude,
-            locationDescrip: this.state.locationDescrip
+            latitude: context.state.location.latitude,
+            longitude: context.state.location.longitude,
+            locationDescrip: context.state.locationDescrip
           })
         }).then(function(response) {
           context.getMemoryData(databaseId, 0);
