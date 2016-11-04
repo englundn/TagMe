@@ -7,6 +7,7 @@ var clarifai = require('../../api/clarifai');
 var microsoft = require('../../api/microsoft');
 var caption = require('../../api/caption');
 var _ = require('lodash');
+var path = require('path');
 
 // techdebt: break upload into several functions to make it readable
 exports.upload = function(req, res) {
@@ -16,7 +17,7 @@ exports.upload = function(req, res) {
     console.log('Multer failed to save file');
     res.status(404).send();
   } else {
-    awsClient.upload('uploads/' + req.file.filename, {}, function(err, versions, meta) {
+    awsClient.upload('uploads/' + req.file.filename), {}, function(err, versions, meta) {
       if (err) { 
         console.log('s3 upload error: ', err); 
       }
@@ -131,15 +132,24 @@ exports.fetchOne = function(req, res) {
 
 exports.update = function(req, res) {
   console.log('POST /api/memories/id/update. username:', req.user.username);
+  console.log('update data', req.body)
   Memory.findOne({_id: req.params.id}).then(function(memory) {
     memory.latitude = req.body.latitude;
     memory.longitude = req.body.longitude;
     memory.locationDesc = req.body.locationDesc;
-    memory.save().then(function() {
-      res.status(200).send(memory);
-    }).catch(function(err) {
-      res.status(404).send();
-    })
+    Memory.update({ _id: req.params.id }, { $set: { latitude: req.body.latitude, longitude: req.body.longitude, locationDesc: req.body.locationDesc}}, function(err) {
+        if (err) {
+          console.log('Error saving tags:', err);
+          res.sendStatus(404);
+        }
+        
+        res.sendStatus(201);
+    });
+    // memory.save().then(function() {
+    //   res.status(200).send(memory);
+    // }).catch(function(err) {
+    //   res.status(404).send();
+    // })
   })  
 }
 
