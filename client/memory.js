@@ -174,6 +174,9 @@ export default class Memory extends React.Component {
       }
     }).then(function(res) {
       var memory = JSON.parse(res['_bodyInit']);
+      var latitude = memory.latitude;
+      var longitude = memory.longitude;
+      var locationDescrip = memory.locationDescrip;
       var microsoftTags = [];
       var clarifaiTags = [];
       var caption = [];
@@ -203,7 +206,8 @@ export default class Memory extends React.Component {
         databaseId: id,
         date: date,
         caption: caption,
-        location: {latitude: 37.78825, longitude: -122.4324}
+        location: {latitude: latitude, longitude: longitude},
+        locationDescrip: locationDescrip
       });
     }).catch(function(err) {
       console.log('ERROR', err);
@@ -219,7 +223,8 @@ export default class Memory extends React.Component {
           databaseId: id,
           date: date,
           caption: 'Request Timeout',
-          location: {latitude: 37.78825, longitude: -122.4324}
+          location: {latitude: null, longitude: null},
+          locationDescrip: ''
         });
       }
     });
