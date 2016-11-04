@@ -7,7 +7,7 @@ var memorySchema = new Schema({
   createdAt: Date,
   longitude: Number,
   latitude: Number,
-  locationDesc: String,
+  locationDesc: [],
   keyArray: [],
   analyses: [],
   tags: []
