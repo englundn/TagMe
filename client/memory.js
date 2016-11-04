@@ -109,9 +109,9 @@ export default class Memory extends React.Component {
 
     var form = new FormData();
     form.append('memoryImage', photo);
-    form.append('longitude', this.state.location.longitude);
-    form.append('longitude', this.state.location.longitude);
-    form.append('locationDescrip', this.state.locationDescrip);
+    //form.append('longitude', this.state.location.longitude);
+    //form.append('longitude', this.state.location.longitude);
+    //form.append('locationDescrip', this.state.locationDescrip);
     fetch(config.domain + '/api/memories/upload', 
       {
         body: form,
@@ -122,7 +122,23 @@ export default class Memory extends React.Component {
         }
       }).then(function(res) {
         var databaseId = JSON.parse(res['_bodyInit']);
-        context.getMemoryData(databaseId, 0);
+        
+
+        fetch(config.domain + '/api/memories/id/update/' + this.state.databaseId, {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            latitude: this.state.location.latitude,
+            longitude: this.state.location.longitude,
+            locationDescrip: this.state.locationDescrip
+          })
+        }).then(function(response) {
+          context.getMemoryData(databaseId, 0);
+        })
+        
       });
   }
 
@@ -363,14 +379,21 @@ class Map extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     var region = this.state.region;
-    region.latitude = nextProps.location.latitude;
-    region.longitude = nextProps.location.longitude;
-    this.setState({region: region});
+    region.latitude = nextProps.location.latitude || null;
+    region.longitude = nextProps.location.longitude || null;
+    this.setState({
+      region: region,
+    });
+
+    if (region.longitude !== null || region.latitude !== null) {
+      this.setState({
+        displayMap: true
+      })
+    }
   }
 
   render() {
-    return this.state.region.latitude === null ? 
-    (<Text></Text>) :
+    return this.state.displayMap ? 
     (
       <Components.MapView
         style={styles.map}
@@ -380,7 +403,8 @@ class Map extends React.Component {
           coordinate={{latitude: this.state.region.latitude, longitude: this.state.region.longitude}}
         />
       </Components.MapView>
-    );
+    ) : 
+    (<Text>No Map</Text>)
   }
 
 }

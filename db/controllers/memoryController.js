@@ -10,7 +10,7 @@ var _ = require('lodash');
 
 // techdebt: break upload into several functions to make it readable
 exports.upload = function(req, res) {
-  console.log(req.body);
+  console.log(req.file);
   console.log('POST /api/memories/upload. username:', req.user.username);
   if (!req.file) {
     console.log('Multer failed to save file');
@@ -32,10 +32,7 @@ exports.upload = function(req, res) {
             title: req.file.filename,
             filePath: image.url, 
             createdAt: Date.now(),
-            keyArray: keyArray,
-            longitude: req.body.longitude,
-            latitude: req.body.latitude,
-            locationDesc: req.body.locationDescrip
+            keyArray: keyArray
           }).then(function(memory) {
 
             fs.unlink('uploads/' + req.file.filename, function(err, success) {
@@ -131,6 +128,20 @@ exports.fetchOne = function(req, res) {
     res.status(404).send();
   });
 };
+
+exports.update = function(req, res) {
+  console.log('POST /api/memories/id/update. username:', req.user.username);
+  Memory.findOne({_id: req.params.id}).then(function(memory) {
+    memory.latitude = req.body.latitude;
+    memory.longitude = req.body.longitude;
+    memory.locationDesc = req.body.locationDesc;
+    memory.save().then(function() {
+      res.status(200).send(memory);
+    }).catch(function(err) {
+      res.status(404).send();
+    })
+  })  
+}
 
 exports.storeTags = function(req, res) {
   // If there is no JSON body, return 400
