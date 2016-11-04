@@ -207,6 +207,7 @@ export default class Memory extends React.Component {
       var latitude = memory.latitude;
       var longitude = memory.longitude;
       var locationDescrip = memory.locationDescrip;
+      console.log("test",locationDescrip);
       var microsoftTags = [];
       var clarifaiTags = [];
       var caption = [];
@@ -376,6 +377,7 @@ class LocationInfo extends React.Component {
   }
 
   render() {
+    console.log(this.props.locationDescrip);
     return this.props.locationDescrip.length === 0 ? 
     (<Text></Text>) : 
     (
