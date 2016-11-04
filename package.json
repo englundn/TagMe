@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/IndecipherableSuggestions/TagMeLegacy#readme",
   "dependencies": {
+    "aws-sdk": "^2.6.15",
     "bcrypt": "^0.8.7",
     "body-parser": "^1.15.2",
     "chai": "^3.5.0",
