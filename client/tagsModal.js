@@ -75,20 +75,6 @@ export default class ModalView extends React.Component {
     });
   }
 
-  pressDeleteButton() {
-    var context = this;
-    console.log('Pressed delete button');
-    AlertIOS.alert(
-      'Are you sure you want to delete?',
-      'This will delete this memory permanently.',
-      [
-        {text: 'Delete', onPress: () => context.props.deleteMemory(context.props.databaseId, 0)},
-        {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'}
-      ]
-    );
-  }
-
-
   onSubmit() {
     this.props.updateTags(this.state.filteredTags);
     this.setState({
@@ -102,9 +88,6 @@ export default class ModalView extends React.Component {
       <View>
         <Button onPress={this.setModalVisible.bind(this, true)} style={styles.button}>
           <Text style={styles.buttonText}>Edit Tags</Text>
-        </Button>
-        <Button onPress={this.pressDeleteButton.bind(this)} style={styles.deleteButton}>
-          <Text style={styles.buttonText}>Delete</Text>
         </Button>
         <Modal
           animationType={'slide'}
@@ -236,12 +219,6 @@ const styles = StyleSheet.create({
   button: {
     margin: 10,
     backgroundColor: '#f6755e'
-  },
-
-  deleteButton: {
-    width: 100,
-    margin: 10,
-    backgroundColor: '#B33A3A'
   },
 
   buttonText: {
