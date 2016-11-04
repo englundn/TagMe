@@ -83,7 +83,7 @@ export default class Memories extends React.Component {
     
     try {
       var token =  await AsyncStorage.getItem(STORAGE_KEY);
-      console.log(token);
+      // console.log('Token:', token);
     } catch (error) {
       console.log('AsyncStorage error: ' + error.message);
     }
