@@ -298,9 +298,10 @@ const styles = StyleSheet.create({
   
   sFormText: {
     fontSize: 13,
-    color: '#333'
+    color: '#333',
+    marginTop: 6
   },
-
+  
   button: {
     backgroundColor: '#f6755e',
     height: 45,
