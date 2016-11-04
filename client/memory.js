@@ -28,8 +28,7 @@ export default class Memory extends React.Component {
       status: false,
       databaseId: '',
       caption: '',
-      captionModalVisible: false,
-      tester: ''
+      captionModalVisible: false
     };
   }
 
@@ -286,6 +285,10 @@ export default class Memory extends React.Component {
               alignItems: 'center'
             }
           }>
+          <View style={styles.locationContainer}>
+            <Ionicons name="ios-pin" size={15} color="#444" />
+            <Text style={styles.locationText}>{'Taken at ' + this.props.locationDescrip.join(', ')}</Text>
+          </View>
           <Image style={styles.image} resizeMode={Image.resizeMode.contain} source={{uri: this.state.image.uri}}/>
           <View style={styles.captionContainer}>
             <Text style={styles.caption}>{this.state.caption}</Text>
@@ -410,6 +413,19 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: '#444',
     paddingTop: 25
+  },
+
+  locationText: {
+    fontSize: 12,
+    color: '#717782',
+    paddingLeft: 5
+  },
+
+  locationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    padding: 15
   },
 
   tagsContainer: {
