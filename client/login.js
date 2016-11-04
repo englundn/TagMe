@@ -181,7 +181,7 @@ export default class Login extends React.Component {
                       placeholder='USERNAME'
                       placeholderTextColor='#444'
                       autoCapitalize='none'
-                      autoCorrect='false'
+                      autoCorrect={false}
                       onChangeText={(text) => this.setState({username: text})}
                       value={this.state.username}
                       style={styles.formText}
@@ -194,7 +194,7 @@ export default class Login extends React.Component {
                       placeholder='PASSWORD'
                       placeholderTextColor='#444'
                       autoCapitalize='none'
-                      autoCorrect='false'
+                      autoCorrect={false}
                       secureTextEntry={true}
                       onChangeText={(text) => this.setState({password: text})}
                       value={this.state.password}
