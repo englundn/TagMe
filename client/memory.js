@@ -376,6 +376,7 @@ class LocationInfo extends React.Component {
   }
 
   render() {
+    console.log(this.props.locationDescrip);
     return this.props.locationDescrip.length === 0 ? 
     (<Text></Text>) : 
     (
