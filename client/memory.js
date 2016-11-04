@@ -406,7 +406,7 @@ class Map extends React.Component {
         />
       </Components.MapView>
     ) : 
-    (<Text>No Map</Text>)
+    (<Text></Text>)
   }
 
 }
