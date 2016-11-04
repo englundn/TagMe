@@ -122,7 +122,7 @@ export default class Memory extends React.Component {
   }
 
   async deleteMemory(id, pings) {
-    console.log(id);
+
     var context = this;
     console.log(context.props.navigator.length);
 
@@ -284,18 +284,22 @@ export default class Memory extends React.Component {
             }
           }>
           <Image style={styles.image} resizeMode={Image.resizeMode.contain} source={{uri: this.state.image.uri}}/>
-            <View style={styles.captionContainer}>
-              <Text style={styles.caption}>{this.state.caption}</Text>
-              <Ionicons onPress={this.openEditCaption.bind(this)} name="md-create" size={35} color="#444" /> 
-            </View>
-              <Modal
-                animationType={'slide'}
-                transparent={true}
-                visible={this.state.captionModalVisible}
-                onRequestClose={() => { alert('Modal has been closed.'); }}
-              >
-                <CaptionEditor saveCaption={this.saveCaption.bind(this)} cancelEdit={this.closeEditCaption.bind(this)} captions={this.state.caption} />
-              </Modal>
+          <View style={styles.captionContainer}>
+            <Text style={styles.caption}>{this.state.caption}</Text>
+            <Ionicons onPress={this.openEditCaption.bind(this)} name="md-create" size={35} color="#444" /> 
+          </View>
+            <Modal
+              animationType={'slide'}
+              transparent={true}
+              visible={this.state.captionModalVisible}
+              onRequestClose={() => { alert('Modal has been closed.'); }}
+            >
+              <CaptionEditor
+                caption={this.state.caption}
+                saveCaption={this.saveCaption.bind(this)}
+                cancelEdit={this.closeEditCaption.bind(this)}
+                captions={this.state.caption} />
+            </Modal>
           <MemoryDetails 
             status={this.state.status} 
             tags={this.state.filteredTags}
@@ -346,7 +350,7 @@ class CaptionEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      caption: ''
+      caption: this.props.caption
     };
   }
 
@@ -359,6 +363,7 @@ class CaptionEditor extends React.Component {
       <ScrollView contentContainerStyle={styles.modal}>
           <Text style={styles.caption}>Type Here to edit caption</Text>
           <TextInput
+            defaultValue={this.props.caption}
             placeholderTextColor='#444'
             onChangeText={(text) => this.setState({caption: text})}
             multiline={true}
@@ -417,7 +422,8 @@ const styles = StyleSheet.create({
     ...Font.style('montserrat'),
     fontSize: 16,
     textAlign: 'center',
-    margin: 10
+    margin: 10,
+    width: 290
   },
 
   captionInput: {
@@ -433,6 +439,7 @@ const styles = StyleSheet.create({
   },
 
   captionContainer: {
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
   },

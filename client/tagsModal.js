@@ -4,6 +4,7 @@ import {
   Text,
   View,
   AsyncStorage,
+  AlertIOS,
   Modal,
   TextInput
 } from 'react-native';
@@ -74,6 +75,19 @@ export default class ModalView extends React.Component {
     });
   }
 
+  pressDeleteButton() {
+    var context = this;
+    AlertIOS.alert(
+      'Are you sure you want to delete?',
+      'This will delete this memory permanently.',
+      [
+        {text: 'Delete', onPress: () => context.props.deleteMemory(context.props.databaseId, 0)},
+        {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'}
+      ]
+    );
+  }
+
+
   onSubmit() {
     this.props.updateTags(this.state.filteredTags);
     this.setState({
@@ -88,7 +102,7 @@ export default class ModalView extends React.Component {
         <Button onPress={this.setModalVisible.bind(this, true)} style={styles.button}>
           <Text style={styles.buttonText}>Edit Tags</Text>
         </Button>
-        <Button onPress={() => this.props.deleteMemory(this.props.databaseId, 0)} style={styles.deleteButton}>
+        <Button onPress={this.pressDeleteButton} style={styles.deleteButton}>
           <Text style={styles.buttonText}>Delete</Text>
         </Button>
         <Modal
@@ -219,7 +233,6 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    width: 100,
     margin: 10,
     backgroundColor: '#f6755e'
   },
