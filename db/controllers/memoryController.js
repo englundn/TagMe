@@ -217,7 +217,7 @@ exports.searchMemories = function(req, res) {
   })
   .catch(function(err) {
     console.log('err getting memories', err);
-    res.status(404).send('error searching the databse');
+    res.status(404).send({error: err});
   });
 };
 
@@ -240,7 +240,7 @@ exports.deleteMemory = function(req, res) {
       function(err, data) {
         if (err) { 
           console.log('ERROR DELETING OBJECTS FROM S3', err, err.stack); 
-          res.status(404).send();
+          res.status(404).send({error: err});
         }
         else { 
           console.log('SUCCESS DELETING OBJECTS FROM S3', data); 
@@ -251,6 +251,6 @@ exports.deleteMemory = function(req, res) {
 
   })
   .catch(function(err) {
-    res.status(404).send();
+    res.status(404).send({error: err});
   });
 };
