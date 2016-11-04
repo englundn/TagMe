@@ -336,7 +336,8 @@ export default class Memory extends React.Component {
               onPress={this.openEditCaption.bind(this)}
               name="md-create"
               size={35}
-              color={this.state.status ? "#444" : "#FFF"}
+              color="#444"
+              opacity={this.props.status ? '100' : '0'}
             /> 
           </View>
             <Modal
