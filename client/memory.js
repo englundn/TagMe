@@ -23,14 +23,14 @@ export default class Memory extends React.Component {
     super(props);
     this.state = {
       image: this.props.image,
-      location: {latitude: 37.78825, longitude: -122.4324},
+      location: {latitude: null, longitude: null},
       tags: [],
       filteredTags: [],
       status: false,
       databaseId: '',
       caption: '',
       captionModalVisible: false,
-      locationDescrip: this.props.locationDescrip.join(', ') || ''
+      locationDescrip: this.props.locationDescrip || ''
     };
   }
 
@@ -109,7 +109,7 @@ export default class Memory extends React.Component {
 
     var form = new FormData();
     form.append('memoryImage', photo);
-    form.append('latitude', this.state.location.latitude);
+    form.append('longitude', this.state.location.longitude);
     form.append('longitude', this.state.location.longitude);
     form.append('locationDescrip', this.state.locationDescrip);
     fetch(config.domain + '/api/memories/upload', 
@@ -202,7 +202,8 @@ export default class Memory extends React.Component {
         status: true, 
         databaseId: id,
         date: date,
-        caption: caption
+        caption: caption,
+        location: {latitude: 37.78825, longitude: -122.4324}
       });
     }).catch(function(err) {
       console.log('ERROR', err);
@@ -217,7 +218,8 @@ export default class Memory extends React.Component {
           status: true, 
           databaseId: id,
           date: date,
-          caption: 'Request Timeout'
+          caption: 'Request Timeout',
+          location: {latitude: 37.78825, longitude: -122.4324}
         });
       }
     });
@@ -329,12 +331,12 @@ class LocationInfo extends React.Component {
   }
 
   render() {
-    return this.props.locationDescrip.length === '' ? 
+    return this.props.locationDescrip.length === 0 ? 
     (<Text></Text>) : 
     (
       <View style={styles.locationContainer}>
         <Ionicons name="ios-pin" size={15} color="#444" />
-        <Text style={styles.locationText}>{'Taken at ' + this.props.locationDescrip}</Text>
+        <Text style={styles.locationText}>{'Taken at ' + this.props.locationDescrip.join(', ')}</Text>
       </View>
     );
   }
@@ -344,25 +346,33 @@ class Map extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      long: this.props.location.longitude,
-      lat: this.props.location.latitude,
+      region: {
+        latitude: this.props.location.latitude,
+        longitude: this.props.location.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      },
       displayMap: false
     } 
   }
 
+  componentWillReceiveProps(nextProps) {
+    var region = this.state.region;
+    region.latitude = nextProps.location.latitude;
+    region.longitude = nextProps.location.longitude;
+    this.setState({region: region});
+  }
+
   render() {
-    return (
+    return this.state.region.latitude === null ? 
+    (<Text></Text>) :
+    (
       <Components.MapView
         style={styles.map}
-        initialRegion={{
-          latitude: this.state.lat,
-          longitude: this.state.long,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
+        region={this.state.region}
       >
         <Components.MapView.Marker
-          coordinate={this.props.location}
+          coordinate={{latitude: this.state.region.latitude, longitude: this.state.region.longitude}}
         />
       </Components.MapView>
     );
