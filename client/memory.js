@@ -5,6 +5,7 @@ import {
   Text,
   TextInput,
   AsyncStorage,
+  AlertIOS,
   ScrollView,
   Image,
   Modal
@@ -65,6 +66,19 @@ export default class Memory extends React.Component {
 
   async closeEditCaption() {
     this.setState({captionModalVisible: false});
+  }
+
+  pressDeleteButton() {
+    var context = this;
+    console.log('Pressed delete button');
+    AlertIOS.alert(
+      'Are you sure you want to delete?',
+      'This will delete this memory permanently.',
+      [
+        {text: 'Delete', onPress: () => context.deleteMemory(context.state.databaseId, 0)},
+        {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'}
+      ]
+    );
   }
 
   async saveCaption(newCaption) {
@@ -340,6 +354,11 @@ export default class Memory extends React.Component {
           {loading}
 
           <Map location={this.state.location} />
+          <View style={styles.deleteContainer}>
+            <Button onPress={this.pressDeleteButton.bind(this)} style={styles.deleteButton}>
+              <Text style={styles.buttonText}>Delete</Text>
+            </Button>
+          </View>
         </Content>
       </Container>
     );
@@ -508,6 +527,11 @@ const styles = StyleSheet.create({
     paddingTop: 25
   },
 
+  deleteContainer: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
   locationText: {
     fontSize: 12,
     color: '#717782',
@@ -566,6 +590,12 @@ const styles = StyleSheet.create({
   button: {
     margin: 10,
     backgroundColor: '#f6755e'
+  },
+
+  deleteButton: {
+    width: 100,
+    margin: 10,
+    backgroundColor: '#B33A3A'
   },
 
   buttonText: {
