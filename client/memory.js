@@ -109,7 +109,7 @@ export default class Memory extends React.Component {
 
     var form = new FormData();
     form.append('memoryImage', photo);
-    form.append('longitude', this.state.location.longitude);
+    form.append('latitude', this.state.location.latitude);
     form.append('longitude', this.state.location.longitude);
     form.append('locationDescrip', this.state.locationDescrip);
     fetch(config.domain + '/api/memories/upload', 
