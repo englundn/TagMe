@@ -220,14 +220,16 @@ export default class Login extends React.Component {
             this.state.fontLoaded ? (
             <View style={styles.buttonsContainer}>
               <Button primary style={styles.button} onPress={this.login.bind(this)}>
-                <Text style={styles.buttonText}>
-                  Login <Ionicons name="ios-log-in" size={25} color="white" />
+                <Text style={styles.buttonText}> Login </Text>
+                <Text style={styles.buttonIcon}>
+                <Ionicons name="ios-log-in" size={25} color="white" />
                 </Text>
               </Button>
 
               <Button primary style={styles.button} onPress={this.signup.bind(this)}>
-                <Text style={styles.buttonText}>
-                  Signup <Ionicons name="ios-person-add-outline" size={25} color="white" />
+                <Text style={styles.buttonText}> Signup </Text>
+                <Text style={styles.buttonIcon}>
+                  <Ionicons name="ios-person-add-outline" size={25} color="white" />
                 </Text>
               </Button>
             </View>
@@ -320,4 +322,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 5
   },
+
+  buttonIcon: {
+    ...Font.style('montserrat'),
+    color: '#fff',
+    fontSize: 18,
+    marginBottom: 5,
+    marginTop: 5
+  }
 });
