@@ -337,7 +337,6 @@ export default class Memory extends React.Component {
               name="md-create"
               size={35}
               color="#444"
-              opacity={this.props.status ? '100' : '0'}
             /> 
           </View>
             <Modal
