@@ -124,7 +124,7 @@ export default class Memory extends React.Component {
         var databaseId = JSON.parse(res['_bodyInit']);
         
 
-        fetch(config.domain + '/api/memories/id/update/' + this.state.databaseId, {
+        fetch(config.domain + '/api/memories/id/update/' + context.state.databaseId, {
           method: 'POST',
           headers: {
             'Authorization': 'Bearer ' + token,
