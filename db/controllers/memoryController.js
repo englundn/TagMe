@@ -152,7 +152,6 @@ exports.update = function(req, res) {
     // })
   //})  
 }
-
 exports.storeTags = function(req, res) {
   // If there is no JSON body, return 400
   console.log('POST /api/memories/id/*. username:', req.user.username);
