@@ -10,6 +10,7 @@ import {
   Modal
 } from 'react-native';
 import { Font } from 'exponent';
+import { Components } from 'exponent';
 import ModalView from './tagsModal';
 import { Container, Header, Title, Content, Footer, Button, Spinner, Input, InputGroup} from 'native-base';
 import { Ionicons } from '@exponent/vector-icons';
@@ -22,14 +23,14 @@ export default class Memory extends React.Component {
     super(props);
     this.state = {
       image: this.props.image,
-      location: this.props.location,
+      location: {latitude: 37.78825, longitude: -122.4324},
       tags: [],
       filteredTags: [],
       status: false,
       databaseId: '',
       caption: '',
       captionModalVisible: false,
-      locationDescrip: this.props.locationDescrip || []
+      locationDescrip: this.props.locationDescrip.join(', ') || ''
     };
   }
 
@@ -108,6 +109,9 @@ export default class Memory extends React.Component {
 
     var form = new FormData();
     form.append('memoryImage', photo);
+    form.append('longitude', this.state.location.longitude);
+    form.append('longitude', this.state.location.longitude);
+    form.append('locationDescrip', this.state.locationDescrip);
     fetch(config.domain + '/api/memories/upload', 
       {
         body: form,
@@ -310,6 +314,8 @@ export default class Memory extends React.Component {
             navigateToSingleTag={this.navigateToSingleTag.bind(this)}
           />
           {loading}
+
+          <Map location={this.state.location} />
         </Content>
       </Container>
     );
@@ -323,15 +329,45 @@ class LocationInfo extends React.Component {
   }
 
   render() {
-    return this.props.locationDescrip.length === 0 ? 
+    return this.props.locationDescrip.length === '' ? 
     (<Text></Text>) : 
     (
       <View style={styles.locationContainer}>
         <Ionicons name="ios-pin" size={15} color="#444" />
-        <Text style={styles.locationText}>{'Taken at ' + this.props.locationDescrip.join(', ')}</Text>
+        <Text style={styles.locationText}>{'Taken at ' + this.props.locationDescrip}</Text>
       </View>
     );
   }
+}
+
+class Map extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      long: this.props.location.longitude,
+      lat: this.props.location.latitude,
+      displayMap: false
+    } 
+  }
+
+  render() {
+    return (
+      <Components.MapView
+        style={styles.map}
+        initialRegion={{
+          latitude: this.state.lat,
+          longitude: this.state.long,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+      >
+        <Components.MapView.Marker
+          coordinate={this.props.location}
+        />
+      </Components.MapView>
+    );
+  }
+
 }
 
 class MemoryDetails extends React.Component {
@@ -514,6 +550,11 @@ const styles = StyleSheet.create({
 
   spinner: {
     padding: 100
+  },
+
+  map: {
+    height: 300,
+    width: 300
   }
 });
 
