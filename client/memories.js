@@ -241,7 +241,7 @@ export default class Memories extends React.Component {
               <InputGroup borderType='rounded' style={{width: 250}}>
                   <Input
                     autoCapitalize='none'
-                    autoCorrect='false'
+                    autoCorrect={false}
                     clearButtonMode='while-editing'
                     returnKeyType='done'
                     placeholder='Search by tag'

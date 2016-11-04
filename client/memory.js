@@ -572,9 +572,3 @@ const styles = StyleSheet.create({
     width: 300
   }
 });
-
-
-            // <View style={this.state.locationDescrip.length === 0 ? : styles.locationContainerShow}>
-            //   <Ionicons name="ios-pin" size={15} color="#444" />
-            //   <Text style={styles.locationText}>{'Taken at ' + this.state.locationDescrip.join(', ')}</Text>
-            // </View>
