@@ -332,7 +332,12 @@ export default class Memory extends React.Component {
           <Image style={styles.image} resizeMode={Image.resizeMode.contain} source={{uri: this.state.image.uri}}/>
           <View style={styles.captionContainer}>
             <Text style={styles.caption}>{this.state.caption}</Text>
-            <Ionicons onPress={this.openEditCaption.bind(this)} name="md-create" size={35} color="#444" /> 
+            <Ionicons
+              onPress={this.openEditCaption.bind(this)}
+              name="md-create"
+              size={35}
+              color={this.state.status ? "#444" : "#FFF"}
+            /> 
           </View>
             <Modal
               animationType={'slide'}
