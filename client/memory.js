@@ -23,7 +23,7 @@ export default class Memory extends React.Component {
     super(props);
     this.state = {
       image: this.props.image,
-      location: {latitude: null, longitude: null},
+      location: this.props.location || {latitude: null, longitude: null},
       tags: [],
       filteredTags: [],
       status: false,
@@ -124,7 +124,7 @@ export default class Memory extends React.Component {
         var databaseId = JSON.parse(res['_bodyInit']);
         
 
-        fetch(config.domain + '/api/memories/id/update/' + context.state.databaseId, {
+        fetch(config.domain + '/api/memories/id/update/' + databaseId, {
           method: 'POST',
           headers: {
             'Authorization': 'Bearer ' + token,
@@ -193,6 +193,7 @@ export default class Memory extends React.Component {
       var latitude = memory.latitude;
       var longitude = memory.longitude;
       var locationDescrip = memory.locationDescrip;
+      console.log("test",locationDescrip);
       var microsoftTags = [];
       var clarifaiTags = [];
       var caption = [];
@@ -313,7 +314,7 @@ export default class Memory extends React.Component {
               alignItems: 'center'
             }
           }>
-          <LocationInfo locationDescrip = {this.props.locationDescrip || []}/>  
+          <LocationInfo locationDescrip = {this.state.locationDescrip || []}/>  
           <Image style={styles.image} resizeMode={Image.resizeMode.contain} source={{uri: this.state.image.uri}}/>
           <View style={styles.captionContainer}>
             <Text style={styles.caption}>{this.state.caption}</Text>
@@ -352,6 +353,7 @@ class LocationInfo extends React.Component {
   }
 
   render() {
+    console.log(this.props.locationDescrip);
     return this.props.locationDescrip.length === 0 ? 
     (<Text></Text>) : 
     (
@@ -516,7 +518,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 5
+    paddingTop: 5,
+    margin: 10
   },
 
   tagsContainer: {
