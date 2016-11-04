@@ -118,30 +118,34 @@ export default class Login extends React.Component {
     var deviceId = this.state.rememberSwitchBool ? Exponent.Constants.deviceId : null;
 
     if (this.state.username && this.state.password) {
-      fetch(config.domain + '/api/users/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          username: this.state.username,
-          password: this.state.password,
-          deviceId: deviceId
+      if (this.state.username.length < 10) {
+        fetch(config.domain + '/api/users/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            username: this.state.username,
+            password: this.state.password,
+            deviceId: deviceId
+          })
         })
-      })
-      .then(function(response) {
-        var username = context.state.username;
-        context.clearInput();
-        if (response.status === 201) {
-          var token = JSON.parse(response._bodyText).id_token;
-          return context._onValueChange(STORAGE_KEY, token)
-            .then(function() {
-              context._navigate(username);
-            });
-        } else {
-          AlertIOS.alert('Username already exists.');
-        }
-      });
+        .then(function(response) {
+          var username = context.state.username;
+          context.clearInput();
+          if (response.status === 201) {
+            var token = JSON.parse(response._bodyText).id_token;
+            return context._onValueChange(STORAGE_KEY, token)
+              .then(function() {
+                context._navigate(username);
+              });
+          } else {
+            AlertIOS.alert('Username already exists.');
+          }
+        });
+      } else {
+        AlertIOS.alert('Username must be less than 10 characters.');
+      }
     } else {
       AlertIOS.alert('Username and password required.');
     }
