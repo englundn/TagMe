@@ -77,6 +77,7 @@ export default class ModalView extends React.Component {
 
   pressDeleteButton() {
     var context = this;
+    console.log('Pressed delete button');
     AlertIOS.alert(
       'Are you sure you want to delete?',
       'This will delete this memory permanently.',
@@ -102,7 +103,7 @@ export default class ModalView extends React.Component {
         <Button onPress={this.setModalVisible.bind(this, true)} style={styles.button}>
           <Text style={styles.buttonText}>Edit Tags</Text>
         </Button>
-        <Button onPress={this.pressDeleteButton} style={styles.deleteButton}>
+        <Button onPress={this.pressDeleteButton.bind(this)} style={styles.deleteButton}>
           <Text style={styles.buttonText}>Delete</Text>
         </Button>
         <Modal
