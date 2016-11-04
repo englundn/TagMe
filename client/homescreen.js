@@ -100,11 +100,23 @@ export default class Homescreen extends React.Component {
   };
 
   getImage() {
-    var context = this;
     var oneImage = async function(){
       return Exponent.ImagePicker.launchImageLibraryAsync({});
     };
     oneImage().then((image)=> {
+      if (!image.cancelled) {
+        this._navigate('Memory', image.uri);
+      }
+    });
+  }
+
+  takeImage() {
+    var context = this;
+    var newImage = async function() {
+      return Exponent.ImagePicker.launchCameraAsync({});
+    };
+    // console.log('LOCATION IS ', Exponent.Location.getCurrentPositionAsync());
+    newImage().then((image) => {
       if (!image.cancelled) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
@@ -122,26 +134,6 @@ export default class Homescreen extends React.Component {
               }
               context._navigate('Memory', image.uri, geoloc, locationTags);
             });
-          },
-          (error) => alert(JSON.stringify(error)),
-          {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-        );
-        // this._navigate('Memory', image.uri);
-      }
-    });
-  }
-
-  takeImage() {
-    var newImage = async function() {
-      return Exponent.ImagePicker.launchCameraAsync({});
-    };
-    // console.log('LOCATION IS ', Exponent.Location.getCurrentPositionAsync());
-    newImage().then((image) => {
-      if (!image.cancelled) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            var geoloc = {latitude: position.coords.latitude, longitude: position.coords.longitude};
-            this._navigate('Memory', image.uri, geoloc);
           },
           (error) => alert(JSON.stringify(error)),
           {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
