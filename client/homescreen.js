@@ -120,7 +120,6 @@ export default class Homescreen extends React.Component {
                   locationTags.push(address[i].long_name);
                 }
               }
-              console.log('will this console log work???', locationTags);
               context._navigate('Memory', image.uri, geoloc, locationTags);
             });
           },
