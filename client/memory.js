@@ -28,7 +28,8 @@ export default class Memory extends React.Component {
       status: false,
       databaseId: '',
       caption: '',
-      captionModalVisible: false
+      captionModalVisible: false,
+      locationDescrip: this.props.locationDescrip || []
     };
   }
 
@@ -218,6 +219,7 @@ export default class Memory extends React.Component {
     });
   }
 
+
   async updateTags(filteredTags) {
     if (filteredTags.length === 0) {
       return;
@@ -263,6 +265,7 @@ export default class Memory extends React.Component {
         previousTags={this.state.filteredTags}
         updateTags={this.updateTags.bind(this)}
         status={this.state.status}
+        location={this.state.location}
       />
       : null;
     return (
@@ -283,6 +286,7 @@ export default class Memory extends React.Component {
               alignItems: 'center'
             }
           }>
+          <LocationInfo locationDescrip = {this.props.locationDescrip || []}/>  
           <Image style={styles.image} resizeMode={Image.resizeMode.contain} source={{uri: this.state.image.uri}}/>
           <View style={styles.captionContainer}>
             <Text style={styles.caption}>{this.state.caption}</Text>
@@ -308,6 +312,24 @@ export default class Memory extends React.Component {
           {loading}
         </Content>
       </Container>
+    );
+  }
+}
+
+
+class LocationInfo extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return this.props.locationDescrip.length === 0 ? 
+    (<Text></Text>) : 
+    (
+      <View style={styles.locationContainer}>
+        <Ionicons name="ios-pin" size={15} color="#444" />
+        <Text style={styles.locationText}>{'Taken at ' + this.props.locationDescrip.join(', ')}</Text>
+      </View>
     );
   }
 }
@@ -409,6 +431,19 @@ const styles = StyleSheet.create({
     paddingTop: 25
   },
 
+  locationText: {
+    fontSize: 12,
+    color: '#717782',
+    paddingLeft: 5
+  },
+
+  locationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 5
+  },
+
   tagsContainer: {
     flexWrap: 'wrap',
     flexDirection: 'row',
@@ -481,3 +516,9 @@ const styles = StyleSheet.create({
     padding: 100
   }
 });
+
+
+            // <View style={this.state.locationDescrip.length === 0 ? : styles.locationContainerShow}>
+            //   <Ionicons name="ios-pin" size={15} color="#444" />
+            //   <Text style={styles.locationText}>{'Taken at ' + this.state.locationDescrip.join(', ')}</Text>
+            // </View>

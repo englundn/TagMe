@@ -19,7 +19,7 @@ export default class Homescreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      fontLoaded: false
+      fontLoaded: false,
     }
   }
 
@@ -40,14 +40,15 @@ export default class Homescreen extends React.Component {
     }
   }
 
-  _navigate(sceneName, imageUri, coordinates) {
+  _navigate(sceneName, imageUri, coordinates, googleResponse) {
     this.props.navigator.push({
       name: sceneName,
       passProps: {
         'image': {uri: imageUri},
         'location': coordinates,
         'username': this.props.username,
-        'prevScene': 'Homescreen'
+        'prevScene': 'Homescreen',
+        'locationDescrip': googleResponse
       }
     });
   }
@@ -88,20 +89,13 @@ export default class Homescreen extends React.Component {
     };
     oneImage().then((image)=> {
       if (!image.cancelled) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            var geoloc = {latitude: position.coords.latitude, longitude: position.coords.longitude};
-            this._navigate('Memory', image.uri, geoloc);
-          },
-          (error) => alert(JSON.stringify(error)),
-          {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-        );
-        // this._navigate('Memory', image.uri);
+        this._navigate('Memory', image.uri);
       }
     });
   }
 
   takeImage() {
+    var context = this;
     var newImage = async function() {
       return Exponent.ImagePicker.launchCameraAsync({});
     };
@@ -111,7 +105,19 @@ export default class Homescreen extends React.Component {
         navigator.geolocation.getCurrentPosition(
           (position) => {
             var geoloc = {latitude: position.coords.latitude, longitude: position.coords.longitude};
-            this._navigate('Memory', image.uri, geoloc);
+            var googleApiKey = 'AIzaSyCPBzWzMZuqgV4Pw0Npb-QgXjKgmGgh1xc';
+            fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + geoloc.latitude + ',' + geoloc.longitude + '&key=' + googleApiKey,  {
+              method: 'GET'
+            }).then(function(res) {
+              var locationTags = [];
+              var address = JSON.parse(res['_bodyInit']).results[0].address_components;
+              for (var i = 0; i < address.length; i++) {
+                if (address[i].types.includes('neighborhood') || address[i].types.includes('locality')) {
+                  locationTags.push(address[i].long_name);
+                }
+              }
+              context._navigate('Memory', image.uri, geoloc, locationTags);
+            });
           },
           (error) => alert(JSON.stringify(error)),
           {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
