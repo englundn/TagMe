@@ -1,6 +1,7 @@
 var Memory = require('../models/memoryModel');
 var User = require('../models/userModel');
 var awsClient = require('../../server/aws');
+var AWS = require('aws-sdk');
 var fs = require('fs');
 var clarifai = require('../../api/clarifai');
 var microsoft = require('../../api/microsoft');
@@ -19,6 +20,8 @@ exports.upload = function(req, res) {
         console.log('s3 upload error: ', err); 
       }
 
+      var keyArray = versions.map(image => { return {Key: image.key}; } );
+
       versions.forEach(function(image) {
         // S3-uploader library returns all images, including created thumbnails. Use only the original image
         if (image.original) {
@@ -27,7 +30,8 @@ exports.upload = function(req, res) {
           Memory.create({
             title: req.file.filename,
             filePath: image.url, 
-            createdAt: Date.now()
+            createdAt: Date.now(),
+            keyArray: keyArray
           }).then(function(memory) {
 
             fs.unlink('uploads/' + req.file.filename, function(err, success) {
@@ -217,8 +221,32 @@ exports.deleteMemory = function(req, res) {
   console.log('deleteMemory in memoryController');
   Memory.findOne({ _id: req.params.id }).then(function(memory) {
     memory.remove();
-    res.status(200).send(memory);
-  }).catch(function(err) {
+    return memory;
+  })
+  .then(function(memory) {
+    console.log('trying to delete ', memory.keyArray);
+    var params = {
+      Bucket: 'indecipherablesuggestions'/* bucket name */, 
+      Delete: { /* required */
+        Objects: memory.keyArray
+      }
+    };
+
+    s3.deleteObjects(params,
+      function(err, data) {
+        if (err) { 
+          console.log('ERROR DELETING OBJECTS FROM S3', err, err.stack); 
+          res.status(404).send();
+        }
+        else { 
+          console.log('SUCCESS DELETING OBJECTS FROM S3', data); 
+          res.status(200).send(memory);
+        }
+      }
+    );
+
+  })
+  .catch(function(err) {
     res.status(404).send();
   });
 };
