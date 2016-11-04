@@ -137,7 +137,7 @@ exports.update = function(req, res) {
   //   memory.latitude = req.body.latitude;
   //   memory.longitude = req.body.longitude;
   //   memory.locationDesc = req.body.locationDesc;
-    Memory.update({ _id: req.params.id }, { $set: { latitude: req.body.latitude, longitude: req.body.longitude, locationDesc: req.body.locationDesc}}, function(err) {
+    Memory.update({ _id: req.params.id }, { $set: { latitude: req.body.latitude, longitude: req.body.longitude, locationDescrip: req.body.locationDescrip}}, function(err) {
         if (err) {
           console.log('Error saving tags:', err);
           res.sendStatus(404);
