@@ -230,7 +230,7 @@ export default class Memories extends React.Component {
           page={this.state.page}
           renderTabBar={() => <ScrollableTabBar activeTextColor="#25a2c3" underlineStyle={{ backgroundColor:"#25a2c3"}}/>} >
 
-          <View tabLabel='Photos'>
+          <View style={{flex:1}} tabLabel='Photos'>
             <Content contentContainerStyle={{
               flexWrap: 'wrap',
               flexDirection: 'column',
