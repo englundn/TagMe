@@ -133,10 +133,10 @@ exports.fetchOne = function(req, res) {
 exports.update = function(req, res) {
   console.log('POST /api/memories/id/update. username:', req.user.username);
   console.log('update data', req.body)
-  Memory.findOne({_id: req.params.id}).then(function(memory) {
-    memory.latitude = req.body.latitude;
-    memory.longitude = req.body.longitude;
-    memory.locationDesc = req.body.locationDesc;
+  // Memory.findOne({_id: req.params.id}).then(function(memory) {
+  //   memory.latitude = req.body.latitude;
+  //   memory.longitude = req.body.longitude;
+  //   memory.locationDesc = req.body.locationDesc;
     Memory.update({ _id: req.params.id }, { $set: { latitude: req.body.latitude, longitude: req.body.longitude, locationDesc: req.body.locationDesc}}, function(err) {
         if (err) {
           console.log('Error saving tags:', err);
@@ -150,7 +150,7 @@ exports.update = function(req, res) {
     // }).catch(function(err) {
     //   res.status(404).send();
     // })
-  })  
+  //})  
 }
 
 exports.storeTags = function(req, res) {
