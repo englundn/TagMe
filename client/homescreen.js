@@ -83,22 +83,6 @@ export default class Homescreen extends React.Component {
     });
   }
 
-  getLocationName(location) {
-    var context = this;
-    var lat = location.latitude;
-    var long = location.longitude;
-    var googleApiKey = 'AIzaSyCPBzWzMZuqgV4Pw0Npb-QgXjKgmGgh1xc';
-    fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + long + '&key=' + googleApiKey,  {
-      method: 'GET'
-    }).then(function(res) {
-      context.setState({
-        locationDescrip: res
-      });
-    }).catch(function(err) {
-      console.log('ERROR', err);
-    });
-  };
-
   getImage() {
     var oneImage = async function(){
       return Exponent.ImagePicker.launchImageLibraryAsync({});
