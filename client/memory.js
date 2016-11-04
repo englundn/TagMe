@@ -31,7 +31,7 @@ export default class Memory extends React.Component {
       databaseId: '',
       caption: '',
       captionModalVisible: false,
-      locationDescrip: this.props.locationDescrip || ''
+      locationDescrip: this.props.locationDescrip || []
     };
   }
 
@@ -377,7 +377,6 @@ class LocationInfo extends React.Component {
   }
 
   render() {
-    console.log(this.props.locationDescrip);
     return this.props.locationDescrip.length === 0 ? 
     (<Text></Text>) : 
     (
