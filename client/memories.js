@@ -98,7 +98,7 @@ export default class Memories extends React.Component {
       }
     })
     .then(function(memories) {
-      var memoryArray = JSON.parse(memories['_bodyInit']);
+      var memoryArray = JSON.parse(memories['_bodyInit']).reverse();
       var images = memoryArray.map(memory => {
         return {
           id: memory._id,
