@@ -208,18 +208,14 @@ exports.searchMemories = function(req, res) {
     console.log('user', user);
     var memsWithTags = user.memories.filter(function(memory) {
       var found = false; 
-
-      if (_.difference(searchTerm, memory.tags).length === 0) {
-        found = true;
-      }
-      // memory.tags.forEach(function(tag) {
-
-      //   searchTerm.forEach(function(term) {
-      //     if (_.includes(tag, term)) {
-      //       found = true;
-      //     }
-      //   });
-      // });
+      
+      memory.tags.forEach(function(tag) {
+        searchTerm.forEach(function(term) {
+          if (_.includes(tag, term)) {
+            found = true;
+          }
+        });
+      });
       return found; 
     });
 

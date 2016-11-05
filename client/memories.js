@@ -36,7 +36,7 @@ export default class Memories extends React.Component {
       dataSource: [],
       page: 0,
       locationDescrip: [],
-      allTags: {}
+      allTags: []
     };
   }
 
@@ -111,8 +111,8 @@ export default class Memories extends React.Component {
           tags: memory.tags
         };
       });
-      console.log(tagObject);
-      context.setState({imageList: images, allTags: tagObject});
+      console.log(Object.keys(tagObject));
+      context.setState({imageList: images, allTags: Object.keys(tagObject)});
       var tagsCount = {};
       memoryArray.map(memory => { return memory.tags; }) // get only tags
       .reduce((a, b) => { return a.concat(b)}, []) // flatten array
@@ -274,6 +274,13 @@ export default class Memories extends React.Component {
               </Button>)
     });
 
+    var suggestedNode = this.state.allTags.filter(tag => this.filterTags(this.state.searchTerm, [tag])).map(function(tag, i) {
+      return (<Button onPress={context.searchOnTabPage.bind(context, tag)} key={i} style={styles.altTag} rounded info>
+                <Text key={i} style={styles.altTagText}>{tag} 
+                </Text>
+              </Button>)
+    });
+
     return (
       <View style={{flex: 1}}>
         {
@@ -319,12 +326,16 @@ export default class Memories extends React.Component {
                     value={this.state.searchTerm}
                   />
               </InputGroup>
-          
             </View>
-            <View style={styles.tagsContainer}>
-              {searchQueueNode}
-            </View> 
-            <View style={{flexDirection: 'row', margin: 3}}> 
+            <View style={{flexDirection: 'column'}}>
+              <View style={styles.tagsContainer}>
+                {this.state.searchTerm.length > 1 ? suggestedNode : null}
+              </View>
+              <View style={styles.tagsContainer}>
+                {searchQueueNode}
+              </View>
+            </View>
+            <View style={{flexDirection: 'row', margin: 3, marginTop: 10}}> 
             <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap', alignItems: 'flex-start'}}>
               {this.state.imageList.filter((image) => {
                   return this.filterTags(this.state.searchTerm, image.tags);
@@ -415,13 +426,26 @@ const styles = StyleSheet.create({
   },
 
   tagsContainer: {
-    marginTop: 30,
-    marginBottom: 10,
+    marginTop: 0,
+    marginBottom: 5,
     flexWrap: 'wrap',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1
+  },
+
+  altTag: {
+    margin: 5,
+    backgroundColor: '#696969',
+    height: 25
+  },
+
+  altTagText: {
+    ...Font.style('helvetica'),
+    fontSize: 14,
+    letterSpacing: 1,
+    color: '#fff'
   },
 
 });
