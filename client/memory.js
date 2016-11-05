@@ -299,7 +299,6 @@ export default class Memory extends React.Component {
   }
 
   async navigateToLocation(location) {
-    //tag is the single tag
     this._navigate('Memories', null, location);
   }
 
@@ -383,8 +382,6 @@ class LocationInfo extends React.Component {
   }
 
   render() {
-    // var passLocation = this.props.locationDescrip;
-    console.log('LOCATION DESCRIPPPP', this.props.locationDescrip);
     return this.props.locationDescrip.length === 0 ? 
     (<Text></Text>) : 
     (
