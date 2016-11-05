@@ -179,14 +179,26 @@ export default class Memories extends React.Component {
         context.search();
       });
     }
-
-    
   }
 
   async cancelSearch() {
     this.setState({searching: false});
     this.setState({searchQuery: []});
     this.fetchMemories();
+  }
+
+  filterTags(query, tagArray) {
+    if (query === '') {
+      return true;
+    };
+    var tagString = tagArray.join(' ');
+    var queryArray = query.split(' ');
+    for (word of queryArray) {
+      if (tagString.indexOf(word) === -1) {
+        return false;
+      }
+    }
+    return true;
   }
 
   render() {
@@ -258,21 +270,14 @@ export default class Memories extends React.Component {
             </View> 
             <View style={{flexDirection: 'row', margin: 3}}> 
             <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap', alignItems: 'flex-start'}}>
-                {
-                  this.state.searching ? (
-                    this.state.queryList.map((image, i) => 
-                      <TouchableHighlight key={i} onPress={this._navigate.bind(this, image)}>
-                        <Image key={i} style={styles.thumbnail} resizeMode={Image.resizeMode.contain} source={{uri: image.uri}}/>
-                      </TouchableHighlight>
-                    )
-                  )
-                  :
-                  this.state.imageList.map((image, i)=> 
-                    <TouchableHighlight key={i} onPress={this._navigate.bind(this, image)}>
-                      <Image key={i} style={styles.thumbnail} resizeMode={Image.resizeMode.contain} source={{uri: image.uri}}/>
-                    </TouchableHighlight>
-                  )
-                }
+              {this.state.imageList.filter((image) => {
+                  return this.filterTags(this.state.searchTerm, image.tags);
+                  }).map((image, i)=> 
+                  <TouchableHighlight key={i} onPress={this._navigate.bind(this, image)}>
+                    <Image key={i} style={styles.thumbnail} resizeMode={Image.resizeMode.contain} source={{uri: image.uri}}/>
+                  </TouchableHighlight>
+                )
+              }
             </View>
             </View> 
             </Content>
