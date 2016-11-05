@@ -84,6 +84,7 @@ export default class Memories extends React.Component {
     
     try {
       var token =  await AsyncStorage.getItem(STORAGE_KEY);
+      // console.log('Token:', token);
     } catch (error) {
       console.log('AsyncStorage error: ' + error.message);
     }
@@ -99,8 +100,7 @@ export default class Memories extends React.Component {
       var images = memoryArray.map(memory => {
         return {
           id: memory._id,
-          uri: memory.filePath,
-          tags: memory.tags
+          uri: memory.filePath
         };
       });
       context.setState({imageList: images});
@@ -116,6 +116,7 @@ export default class Memories extends React.Component {
       dataSource = dataSource.sort(function(a, b) { // sort tags by count
         return b.count - a.count;
       })
+      // console.log(dataSource);
       context.setState({dataSource: dataSource});
     });
   }
@@ -177,26 +178,14 @@ export default class Memories extends React.Component {
         context.search();
       });
     }
+
+    
   }
 
   async cancelSearch() {
     this.setState({searching: false});
     this.setState({searchQuery: []});
     this.fetchMemories();
-  }
-
-  filterTags(query, tagArray) {
-    if (query === '') {
-      return true;
-    };
-    var tagString = tagArray.join(' ');
-    var queryArray = query.split(' ');
-    for (word of queryArray) {
-      if (tagString.indexOf(word) === -1) {
-        return false;
-      }
-    }
-    return true;
   }
 
   render() {
@@ -261,21 +250,38 @@ export default class Memories extends React.Component {
                     value={this.state.searchTerm}
                   />
               </InputGroup>
-          
+              <Button rounded style={{backgroundColor: '#25a2c3', marginLeft: 5}} onPress={this.search.bind(this)}>
+                <Ionicons name='ios-search' size={25} color="#fff"/>
+              </Button>
+              {
+                this.state.searching ? (
+                  <Button rounded bordered style={{borderColor: '#ccc', marginLeft: 5}} 
+                          onPress={this.cancelSearch.bind(this)}>
+                    <Text style={{color: '#444'}}>Cancel</Text>
+                  </Button>
+                ) : null
+              }
             </View>
             <View style={styles.tagsContainer}>
               {searchQueueNode}
             </View> 
             <View style={{flexDirection: 'row', margin: 3}}> 
             <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap', alignItems: 'flex-start'}}>
-              {this.state.imageList.filter((image) => {
-                  return this.filterTags(this.state.searchTerm, image.tags);
-                  }).map((image, i)=> 
-                  <TouchableHighlight key={i} onPress={this._navigate.bind(this, image)}>
-                    <Image key={i} style={styles.thumbnail} resizeMode={Image.resizeMode.contain} source={{uri: image.uri}}/>
-                  </TouchableHighlight>
-                )
-              }
+                {
+                  this.state.searching ? (
+                    this.state.queryList.map((image, i) => 
+                      <TouchableHighlight key={i} onPress={this._navigate.bind(this, image)}>
+                        <Image key={i} style={styles.thumbnail} resizeMode={Image.resizeMode.contain} source={{uri: image.uri}}/>
+                      </TouchableHighlight>
+                    )
+                  )
+                  :
+                  this.state.imageList.map((image, i)=> 
+                    <TouchableHighlight key={i} onPress={this._navigate.bind(this, image)}>
+                      <Image key={i} style={styles.thumbnail} resizeMode={Image.resizeMode.contain} source={{uri: image.uri}}/>
+                    </TouchableHighlight>
+                  )
+                }
             </View>
             </View> 
             </Content>
