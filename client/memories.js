@@ -36,7 +36,7 @@ export default class Memories extends React.Component {
       dataSource: [],
       page: 0,
       locationDescrip: [],
-      allTags: {}
+      allTags: []
     };
   }
 
@@ -272,6 +272,13 @@ export default class Memories extends React.Component {
               </Button>)
     });
 
+    var suggestedNode = this.state.allTags.filter(tag => tag.indexOf(this.state.searchTerm) > -1).map(function(tag, i) {
+      return (<Button onPress={context.searchOnTabPage.bind(context, tag)} key={i} style={styles.altTag} rounded info>
+                <Text key={i} style={styles.altTagText}>{tag} 
+                </Text>
+              </Button>)
+    });
+
     return (
       <View style={{flex: 1}}>
         {
@@ -318,17 +325,15 @@ export default class Memories extends React.Component {
                   />
               </InputGroup>
             </View>
-            {this.state.searchTerm ? 
-            (<View>
-              <Text> 
-                {this.state.allTags.filter(tag => tag.indexOf(this.state.searchTerm) > -1).join(' ')}
-              </Text>
-            </View>)
-            : null}
-            <View style={styles.tagsContainer}>
-              {searchQueueNode}
-            </View> 
-            <View style={{flexDirection: 'row', margin: 3}}> 
+            <View style={{flexDirection: 'column'}}>
+              <View style={styles.tagsContainer}>
+                {this.state.searchTerm ? suggestedNode : null}
+              </View>
+              <View style={styles.tagsContainer}>
+                {searchQueueNode}
+              </View>
+            </View>
+            <View style={{flexDirection: 'row', margin: 3, marginTop: 10}}> 
             <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap', alignItems: 'flex-start'}}>
               {this.state.imageList.filter((image) => {
                   return this.filterTags(this.state.searchTerm, image.tags);
@@ -419,13 +424,24 @@ const styles = StyleSheet.create({
   },
 
   tagsContainer: {
-    marginTop: 30,
-    marginBottom: 10,
+    marginTop: 5,
+    marginBottom: 0,
     flexWrap: 'wrap',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1
+  },
+
+  altTag: {
+    margin: 5
+  },
+
+  altTagText: {
+    ...Font.style('helvetica'),
+    fontSize: 14,
+    letterSpacing: 1,
+    color: '#696969'
   },
 
 });
