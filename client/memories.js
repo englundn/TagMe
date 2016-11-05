@@ -84,7 +84,6 @@ export default class Memories extends React.Component {
     
     try {
       var token =  await AsyncStorage.getItem(STORAGE_KEY);
-      // console.log('Token:', token);
     } catch (error) {
       console.log('AsyncStorage error: ' + error.message);
     }
@@ -101,7 +100,7 @@ export default class Memories extends React.Component {
         return {
           id: memory._id,
           uri: memory.filePath,
-          tags: memory.analyses[1].tags
+          tags: memory.tags
         };
       });
       context.setState({imageList: images});
@@ -117,7 +116,6 @@ export default class Memories extends React.Component {
       dataSource = dataSource.sort(function(a, b) { // sort tags by count
         return b.count - a.count;
       })
-      // console.log(dataSource);
       context.setState({dataSource: dataSource});
     });
   }
