@@ -35,7 +35,8 @@ export default class Memories extends React.Component {
       searching: false,
       dataSource: [],
       page: 0,
-      locationDescrip: []
+      locationDescrip: [],
+      allTags: {}
     };
   }
 
@@ -98,15 +99,20 @@ export default class Memories extends React.Component {
       }
     })
     .then(function(memories) {
-      var memoryArray = JSON.parse(memories['_bodyInit']);
+      var memoryArray = JSON.parse(memories['_bodyInit']).reverse();
+      var tagObject = {};
       var images = memoryArray.map(memory => {
+        memory.tags.forEach(tag => {
+          tagObject[tag] = tag;
+        });
         return {
           id: memory._id,
           uri: memory.filePath,
           tags: memory.tags
         };
       });
-      context.setState({imageList: images});
+      console.log(tagObject);
+      context.setState({imageList: images, allTags: tagObject});
       var tagsCount = {};
       memoryArray.map(memory => { return memory.tags; }) // get only tags
       .reduce((a, b) => { return a.concat(b)}, []) // flatten array
@@ -150,10 +156,12 @@ export default class Memories extends React.Component {
       var images = memoryArray.map(memory => {
         return {
           id: memory._id,
-          uri: memory.filePath
+          uri: memory.filePath,
+          tags: memory.tags
         };
       });
       context.setState({
+        imageList: images,
         queryList: images,
         searching: true,
         searchTerm: '',
