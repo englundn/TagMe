@@ -327,7 +327,7 @@ export default class Memories extends React.Component {
             </View>
             <View style={{flexDirection: 'column'}}>
               <View style={styles.tagsContainer}>
-                {this.state.searchTerm ? suggestedNode : null}
+                {this.state.searchTerm.length > 1 ? suggestedNode : null}
               </View>
               <View style={styles.tagsContainer}>
                 {searchQueueNode}
@@ -424,8 +424,8 @@ const styles = StyleSheet.create({
   },
 
   tagsContainer: {
-    marginTop: 5,
-    marginBottom: 0,
+    marginTop: 0,
+    marginBottom: 5,
     flexWrap: 'wrap',
     flexDirection: 'row',
     justifyContent: 'center',
@@ -434,14 +434,16 @@ const styles = StyleSheet.create({
   },
 
   altTag: {
-    margin: 5
+    margin: 5,
+    backgroundColor: '#696969',
+    height: 25
   },
 
   altTagText: {
     ...Font.style('helvetica'),
     fontSize: 14,
     letterSpacing: 1,
-    color: '#696969'
+    color: '#fff'
   },
 
 });
