@@ -38,6 +38,7 @@ export default class Memories extends React.Component {
   }
 
   async componentDidMount() {
+    console.log('LOCATION', this.props.location);
     await Font.loadAsync({
       'helvetica': require('./assets/fonts/HelveticaNeueMed.ttf'),
       'pacifico': require('./assets/fonts/Pacifico.ttf'),
@@ -50,6 +51,8 @@ export default class Memories extends React.Component {
         searchTerm: this.props.tag
       })
       this.search();
+    } else if (this.props.location !== null && this.props.prevScene === 'Memory') {
+      this.searchLocation();
     } else {
       this.fetchMemories();
     }
@@ -144,6 +147,46 @@ export default class Memories extends React.Component {
       })
     }).then(function(memories) {
       var memoryArray = JSON.parse(memories['_bodyInit']);
+      var images = memoryArray.map(memory => {
+        return {
+          id: memory._id,
+          uri: memory.filePath
+        };
+      });
+      context.setState({
+        queryList: images,
+        searching: true,
+        searchTerm: ''});
+    })
+  }
+
+  async searchLocation() {
+    var query = this.props.location;
+    console.log('SEARCH LOCATION!!!!!!!', query);
+    
+    var context = this;
+    try {
+      var token =  await AsyncStorage.getItem(STORAGE_KEY);
+    } catch (error) {
+      console.log('AsyncStorage error: ' + error.message);
+    }
+
+    fetch(config.domain + '/api/memories/all', {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
+    })
+    .then(function(memories) {
+      var memoryArray = JSON.parse(memories['_bodyInit']);
+      memoryArray = memoryArray.filter(function(memory) {
+        if (memory.locationDescrip.join(', ') === query.join(', ')) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+      console.log('MEMORY ARRAY', memoryArray);
       var images = memoryArray.map(memory => {
         return {
           id: memory._id,
