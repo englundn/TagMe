@@ -272,7 +272,7 @@ export default class Memories extends React.Component {
               </Button>)
     });
 
-    var suggestedNode = this.state.allTags.filter(tag => tag.indexOf(this.state.searchTerm) > -1).map(function(tag, i) {
+    var suggestedNode = this.state.allTags.filter(tag => this.filterTags(this.state.searchTerm, [tag])).map(function(tag, i) {
       return (<Button onPress={context.searchOnTabPage.bind(context, tag)} key={i} style={styles.altTag} rounded info>
                 <Text key={i} style={styles.altTagText}>{tag} 
                 </Text>
