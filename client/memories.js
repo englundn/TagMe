@@ -111,8 +111,8 @@ export default class Memories extends React.Component {
           tags: memory.tags
         };
       });
-      console.log(tagObject);
-      context.setState({imageList: images, allTags: tagObject});
+      console.log(Object.keys(tagObject));
+      context.setState({imageList: images, allTags: Object.keys(tagObject)});
       var tagsCount = {};
       memoryArray.map(memory => { return memory.tags; }) // get only tags
       .reduce((a, b) => { return a.concat(b)}, []) // flatten array
@@ -317,8 +317,14 @@ export default class Memories extends React.Component {
                     value={this.state.searchTerm}
                   />
               </InputGroup>
-          
             </View>
+            {this.state.searchTerm ? 
+            (<View>
+              <Text> 
+                {this.state.allTags.filter(tag => tag.indexOf(this.state.searchTerm) > -1).join(' ')}
+              </Text>
+            </View>)
+            : null}
             <View style={styles.tagsContainer}>
               {searchQueueNode}
             </View> 
