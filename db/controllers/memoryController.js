@@ -209,13 +209,17 @@ exports.searchMemories = function(req, res) {
     var memsWithTags = user.memories.filter(function(memory) {
       var found = false; 
       
-      memory.tags.forEach(function(tag) {
-        searchTerm.forEach(function(term) {
-          if (_.includes(tag, term)) {
-            found = true;
-          }
-        });
-      });
+      if (_.difference(searchTerm, memory.tags).length === 0) {
+        found = true;
+      }
+
+      // memory.tags.forEach(function(tag) {
+      //   searchTerm.forEach(function(term) {
+      //     if (_.includes(tag, term)) {
+      //       found = true;
+      //     }
+      //   });
+      // });
       return found; 
     });
 
