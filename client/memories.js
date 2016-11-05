@@ -35,7 +35,7 @@ export default class Memories extends React.Component {
       searching: false,
       dataSource: [],
       page: 0,
-      locationDescrip: []
+      locationDescrip: [],
       allTags: {}
     };
   }
@@ -156,10 +156,12 @@ export default class Memories extends React.Component {
       var images = memoryArray.map(memory => {
         return {
           id: memory._id,
-          uri: memory.filePath
+          uri: memory.filePath,
+          tags: memory.tags
         };
       });
       context.setState({
+        imageList: images,
         queryList: images,
         searching: true,
         searchTerm: '',
