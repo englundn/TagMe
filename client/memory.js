@@ -207,7 +207,6 @@ export default class Memory extends React.Component {
       var latitude = memory.latitude;
       var longitude = memory.longitude;
       var locationDescrip = memory.locationDescrip;
-      console.log("test",locationDescrip);
       var microsoftTags = [];
       var clarifaiTags = [];
       var caption = [];
