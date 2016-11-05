@@ -34,7 +34,8 @@ export default class Memories extends React.Component {
       searchQuery: [],
       searching: false,
       dataSource: [],
-      page: 0
+      page: 0,
+      locationDescrip: []
     };
   }
 
@@ -51,6 +52,8 @@ export default class Memories extends React.Component {
         searchTerm: this.props.tag
       })
       this.search();
+    } else if (this.props.location !== null && this.props.prevScene === 'Memory') {
+      this.searchLocation();
     } else {
       this.fetchMemories();
     }
@@ -153,7 +156,48 @@ export default class Memories extends React.Component {
       context.setState({
         queryList: images,
         searching: true,
-        searchTerm: ''});
+        searchTerm: '',
+        locationDescrip: []
+      });
+    })
+  }
+
+  async searchLocation() {
+    var query = this.props.location;
+    
+    var context = this;
+    try {
+      var token =  await AsyncStorage.getItem(STORAGE_KEY);
+    } catch (error) {
+      console.log('AsyncStorage error: ' + error.message);
+    }
+
+    fetch(config.domain + '/api/memories/all', {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
+    })
+    .then(function(memories) {
+      var memoryArray = JSON.parse(memories['_bodyInit']);
+      memoryArray = memoryArray.filter(function(memory) {
+        if (memory.locationDescrip.join(', ') === query.join(', ')) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+      console.log('MEMORY ARRAY', memoryArray);
+      var images = memoryArray.map(memory => {
+        return {
+          id: memory._id,
+          uri: memory.filePath
+        };
+      });
+      context.setState({
+        queryList: images,
+        searching: true,
+        locationDescrip: query});
     })
   }
 
@@ -182,6 +226,7 @@ export default class Memories extends React.Component {
   async cancelSearch() {
     this.setState({searching: false});
     this.setState({searchQuery: []});
+    this.setState({locationDescrip: []});  
     this.fetchMemories();
   }
 
@@ -249,6 +294,9 @@ export default class Memories extends React.Component {
               justifyContent: 'center',
               alignItems: 'center'
             }}>
+            <View>
+              <LocationInfo locationDescrip = {this.state.locationDescrip || []}/> 
+            </View> 
             <View style={{flexDirection: 'row', margin: 10}}>
               <InputGroup borderType='rounded' style={{width: 250}}>
                   <Input
@@ -293,6 +341,23 @@ export default class Memories extends React.Component {
   }
 }
 
+class LocationInfo extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return this.props.locationDescrip.length === 0 ? 
+    (<Text></Text>) : 
+    (
+      <View style={styles.locationContainer}>
+        <Ionicons name="ios-pin" size={15} color="#444" />
+        <Text style={styles.locationText}>{'Taken at ' + this.props.locationDescrip.join(', ')}</Text>
+      </View>
+    );
+  }
+}
+
 const styles = StyleSheet.create({
   headerText: {
     ...Font.style('pacifico'),
@@ -305,6 +370,20 @@ const styles = StyleSheet.create({
     width: 90,
     height: 90,
     margin: 1
+  },
+
+  locationText: {
+    fontSize: 12,
+    color: '#717782',
+    paddingLeft: 5
+  },
+
+  locationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 5,
+    margin: 10
   },
 
   tag: {

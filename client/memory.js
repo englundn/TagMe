@@ -35,12 +35,14 @@ export default class Memory extends React.Component {
     };
   }
 
-  _navigate(page, tag) {
+  _navigate(page, tag, location) {
+    console.log('location before navigate', location);
     this.props.navigator.push({
       name: page ? page : 'Homescreen',
       passProps: {
         'username': this.props.username,
         'tag': tag ? tag : null,
+        'location': location ? location : null,
         'prevScene': 'Memory'
       }
     });
@@ -296,6 +298,10 @@ export default class Memory extends React.Component {
     this._navigate('Memories', tag)
   }
 
+  async navigateToLocation(location) {
+    this._navigate('Memories', null, location);
+  }
+
   render() {
     var loading = this.state.status ? 
       <ModalView
@@ -327,7 +333,7 @@ export default class Memory extends React.Component {
               alignItems: 'center'
             }
           }>
-          <LocationInfo locationDescrip = {this.state.locationDescrip || []}/>  
+          <LocationInfo navigateToLocation={this.navigateToLocation.bind(this)} locationDescrip = {this.state.locationDescrip || []}/>  
           <Image style={styles.image} resizeMode={Image.resizeMode.contain} source={{uri: this.state.image.uri}}/>
           <View style={styles.captionContainer}>
             <Text style={styles.caption}>{this.state.caption}</Text>
@@ -382,7 +388,7 @@ class LocationInfo extends React.Component {
     (
       <View style={styles.locationContainer}>
         <Ionicons name="ios-pin" size={15} color="#444" />
-        <Text style={styles.locationText}>{'Taken at ' + this.props.locationDescrip.join(', ')}</Text>
+        <Text onPress={this.props.navigateToLocation.bind(this, this.props.locationDescrip)} style={styles.locationText}>{'Taken at ' + this.props.locationDescrip.join(', ')}</Text>
       </View>
     );
   }
