@@ -100,8 +100,7 @@ export default class Memories extends React.Component {
       var images = memoryArray.map(memory => {
         return {
           id: memory._id,
-          uri: memory.filePath,
-          tags: memory.analyses[1].tags
+          uri: memory.filePath
         };
       });
       context.setState({imageList: images});
@@ -251,7 +250,17 @@ export default class Memories extends React.Component {
                     value={this.state.searchTerm}
                   />
               </InputGroup>
-          
+              <Button rounded style={{backgroundColor: '#25a2c3', marginLeft: 5}} onPress={this.search.bind(this)}>
+                <Ionicons name='ios-search' size={25} color="#fff"/>
+              </Button>
+              {
+                this.state.searching ? (
+                  <Button rounded bordered style={{borderColor: '#ccc', marginLeft: 5}} 
+                          onPress={this.cancelSearch.bind(this)}>
+                    <Text style={{color: '#444'}}>Cancel</Text>
+                  </Button>
+                ) : null
+              }
             </View>
             <View style={styles.tagsContainer}>
               {searchQueueNode}
