@@ -26,6 +26,10 @@ export default class ModalView extends React.Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({previousTags: nextProps.previousTags});
+  }
+
   async componentDidMount() {
     await Font.loadAsync({
       'montserrat': require('./assets/fonts/Montserrat-Regular.ttf'),
