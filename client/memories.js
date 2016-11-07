@@ -335,7 +335,7 @@ export default class Memories extends React.Component {
                 {searchQueueNode}
               </View>
             </View>
-            <View style={{flexDirection: 'row', margin: 3, marginTop: 10}}> 
+            <View style={{flexDirection: 'row', margin: 3, marginTop: 20}}> 
             <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap', alignItems: 'flex-start'}}>
               {this.state.imageList.filter((image) => {
                   return this.filterTags(this.state.searchTerm, image.tags);
