@@ -1,15 +1,14 @@
-[![Stories in Ready](https://badge.waffle.io/IndecipherableSuggestions/TagMeLegacy.png?label=ready&title=Ready)](https://waffle.io/IndecipherableSuggestions/TagMeLegacy)
-[![Stories in Ready](https://badge.waffle.io/IndecipherableSuggestions/TagMeLegacy.png?label=ready&title=Ready)](https://waffle.io/IndecipherableSuggestions/TagMeLegacy)
-# Project Name
-TagMe
+[![Stories in Ready](https://badge.waffle.io/IndecipherableSuggestions/TagMe.png?label=ready&title=Ready)](https://waffle.io/IndecipherableSuggestions/TagMe)
+[![Stories in Ready](https://badge.waffle.io/IndecipherableSuggestions/TagMe.png?label=ready&title=Ready)](https://waffle.io/IndecipherableSuggestions/TagMe)
+# TagMe
 
 Photo and video journaling with automated tagging
 
 ## Team
 
-  - __Product Owner__: Bobby Wei
-  - __Scrum Master__: Bobby Wei
-  - __Development Team Members__: Kyle Chun, Karina Kinaman, Bill Zito, Bobby Wei
+  - __Product Owner__: Nick
+  - __Scrum Master__: Andrew
+  - __Development Team Members__: Steve, Charlotte
 
 ## Table of Contents
 
@@ -27,8 +26,7 @@ Photo and video journaling with automated tagging
 ## Requirements
 
 - Node 0.10.x
-- React Native
-- etc
+- Exponent
 
 ## Development
 
@@ -54,7 +52,7 @@ Once XDE is installed, go to 'open project' and choose the client folder
 
 ### Roadmap
 
-View the project roadmap [here](https://github.com/hr-memories/greenfield/issues)
+View the project roadmap [here](https://github.com/IndecipherableSuggestions/TagMe/issues)
 
 
 ## Contributing
